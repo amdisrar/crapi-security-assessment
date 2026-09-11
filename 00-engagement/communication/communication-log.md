@@ -16,16 +16,17 @@
 | Environment | UAT |
 | Security Assessment Lead | Mr. Wario – Application Security Expert |
 | Client Representative | Mr. Mario |
-| Version | 1.0 |
+| Version | 1.1 |
 | Classification | Confidential |
 | Status | Active – Update Throughout Engagement |
-| Last Updated | 11 September 2026 |
+| Last Updated | 12 September 2026 |
 
 ### Document Revision History
 
 | Version | Date | Author | Change Description |
 |---|---|---|---|
 | 1.0 | 11-Sep-2026 | Mr. Wario | Created Phase 0 communication record |
+| 1.1 | 12-Sep-2026 | Mr. Wario | Added application baseline completion, client review request, technical reconnaissance notice and remote-access confirmation |
 
 ---
 
@@ -213,10 +214,62 @@ Application Security Expert
 
 ---
 
+# Communication 007 – Application Baseline Completed and Technical Reconnaissance Notice
+
+**Date:** 12 September 2026  
+**From:** Mr. Wario  
+**To:** Mr. Mario  
+**Subject:** crAPI Application Baseline Completed – Technical Reconnaissance to Begin
+
+Dear Mr. Mario,
+
+The initial application-understanding activity has now been completed. I reviewed the application as a normal user and documented the primary user and account functions, vehicle functionality, shop and order workflows, community features, profile-management functions and supporting interactions.
+
+The resulting **Application Overview** has been completed as the functional baseline for the assessment. A number of areas remain intentionally open for technical reconnaissance, including authentication/session handling, API endpoints and versions, application roles and authorization boundaries, Docker/service architecture and supporting integrations.
+
+Please let me know if there is any application functionality, business workflow, user role or other information that you believe should be added to the baseline before we proceed further.
+
+In accordance with the agreed assessment schedule, I am now preparing to begin technical reconnaissance. This will include host/service enumeration, technology fingerprinting, API discovery, authentication and authorization mapping, Docker architecture review and validation of application dependencies and data flows.
+
+To support the approved white-box reconnaissance activities, please arrange **SSH or equivalent approved remote administrative access to the crAPI UAT server** for the assessment. The access should allow inspection of the in-scope Docker deployment, service configuration and relevant application components required by the approved Rules of Engagement. A dedicated assessment account is preferred; root access is not required where equivalent commands can be performed through approved privilege elevation.
+
+Please provide connection details and authentication material through the approved secure channel rather than recording passwords, private keys or other secrets in email or the engagement repository.
+
+Regards,  
+**Mr. Wario**  
+Application Security Expert
+
+---
+
+# Communication 008 – Client Confirmation and Remote Access Approval
+
+**Date:** 12 September 2026  
+**From:** Mr. Mario  
+**To:** Mr. Wario  
+**Subject:** RE: crAPI Application Baseline Completed – Technical Reconnaissance to Begin
+
+Dear Mr. Wario,
+
+Thank you for the update. I have reviewed the application-baseline progress and do not have any additional functionality or business workflows to add at this stage. Please proceed with the technical reconnaissance as scheduled.
+
+SSH access to the crAPI UAT server has been arranged for the assessment. The account is approved for the authorized reconnaissance and configuration-review activities, including inspection of the in-scope Docker deployment and relevant service configuration. Access should remain limited to the approved UAT environment and the existing Rules of Engagement continue to apply.
+
+The SSH connection details and authentication material will be provided to you separately through the approved secure channel and should not be recorded in the communication log or public project repository.
+
+Please continue to notify me of any material scope questions, unexpected operational impact, or confirmed High/Critical findings in accordance with the agreed escalation process.
+
+Regards,  
+**Mr. Mario**  
+Client Representative
+
+---
+
 ## Communication Log Status
 
 **Phase 0:** Completed  
-**Next Phase:** Phase 1 – Reconnaissance and Application Understanding  
-**Next Planned Activity:** Baseline normal application functionality
+**Phase 1 – Application Baseline:** Completed  
+**Current Phase:** Phase 1 – Technical Reconnaissance  
+**Current Planned Activities:** Service enumeration, technology fingerprinting, API discovery, authentication/authorization mapping, Docker architecture review and integration/data-flow validation  
+**Remote Access:** Approved and arranged; credentials/details exchanged separately through the approved secure channel
 
 This communication record should be updated whenever a material engagement decision, approval, escalation, scope change, High/Critical finding notification, remediation discussion or retest decision occurs.
