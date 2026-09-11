@@ -2,6 +2,16 @@
 
 > This document is part of a simulated white-box security assessment of OWASP crAPI for training and community reference. The client, contacts, scope details and engagement artifacts are fictitious.
 
+## Engagement Background
+
+The Application Security Expert, **Mr. Wario**, received a request from **Mr. Mario**, the client's technical contact, to perform a security assessment of an application named **crAPI** before it moves beyond its current UAT stage.
+
+The client explained that crAPI is an API-driven web application for vehicle owners. The application was developed using a microservices architecture, but the organization currently has limited security documentation and incomplete technical knowledge of some application components. Mr. Mario is also relatively new to the environment and therefore could not confirm every architectural, API, authentication, and historical detail during the initial discussion.
+
+Before beginning any security testing, Mr. Wario shared a pre-engagement questionnaire with Mr. Mario. The purpose was to understand the business context, application architecture, intended targets, testing permissions, restrictions, data-handling expectations, contacts, and assessment timeline. The answers below represent the information provided by the client at the start of the engagement.
+
+Any answer marked **Not sure**, **May be**, or otherwise incomplete should not be treated as a confirmed technical fact. These gaps will instead become reconnaissance objectives during the assessment and will be validated through authorized testing.
+
 ## 1. Application and Business Context
 
 | Question | Answer |
