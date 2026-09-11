@@ -18,6 +18,6 @@ Application and API Security Assessment
 4. Findings and reporting
 5. Retest and closure
 
-## Important
+## Important Info
 
 This repository documents a simulated white-box security assessment of OWASP crAPI for learning and community reference. The client, contacts, scope details and engagement artifacts are fictitious and created for training purposes.
