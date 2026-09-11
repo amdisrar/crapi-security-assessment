@@ -1,0 +1,36 @@
+# Sensitive evidence
+04-evidence/*
+!04-evidence/.gitkeep
+
+# Credentials / secrets
+*.env
+.env
+*.key
+*.pem
+*.p12
+*.pfx
+credentials*
+secrets*
+
+# Burp files
+*.burp
+*.burp-project
+
+# Temporary files
+*.tmp
+*.log
+*.swp
+*.bak
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Captures / potentially sensitive traffic
+*.pcap
+*.pcapng
+
+# Generated reports
+*.html
+*.xml
