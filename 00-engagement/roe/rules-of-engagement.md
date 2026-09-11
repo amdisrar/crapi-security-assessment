@@ -1,4 +1,4 @@
-# crAPI Application Security Assessment - Rules of Engagement
+# Rules of Engagement
 
 ## Important Info
 
