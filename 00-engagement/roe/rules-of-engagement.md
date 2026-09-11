@@ -1,7 +1,7 @@
-# crAPI Application Security Assessment
-## Rules of Engagement
+# crAPI Application Security Assessment - Rules of Engagement
 
-> **Important Info**
+## Important Info
+
 > This document is part of a simulated white-box security assessment of OWASP crAPI for training and community reference. The client, contacts, scope details and engagement artifacts are fictitious.
 
 ## Document Control
