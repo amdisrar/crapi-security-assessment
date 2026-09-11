@@ -1,5 +1,5 @@
 # crAPI Application Security Assessment
-## Scope of Security Assessment
+## Important Info
 
 > This document is part of a simulated white-box security assessment of OWASP crAPI for training and community reference. The client, contacts, scope details and engagement artifacts are fictitious.
 
