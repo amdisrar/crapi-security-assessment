@@ -20,5 +20,4 @@ Application and API Security Assessment
 
 ## Important
 
-This repository contains security assessment material.
-Sensitive evidence, credentials, tokens and raw captures must not be committed.
+This repository documents a simulated white-box security assessment of OWASP crAPI for learning and community reference. The client, contacts, scope details and engagement artifacts are fictitious and created for training purposes.
