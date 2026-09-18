@@ -1,0 +1,32 @@
+===== PORT 8025 =====
+HTTP/1.1 404 Not Found
+Content-Type: text/plain; charset=utf-8
+X-Content-Type-Options: nosniff
+Date: Fri, 18 Sep 2026 12:39:32 GMT
+Content-Length: 19
+
+
+===== PORT 8888 =====
+HTTP/1.1 200 OK
+Server: openresty/1.27.1.2
+Date: Fri, 18 Sep 2026 12:39:32 GMT
+Content-Type: text/html
+Content-Length: 1207
+Last-Modified: Mon, 22 Sep 2025 18:05:09 GMT
+Connection: keep-alive
+ETag: "68d18fd5-4b7"
+Accept-Ranges: bytes
+
+
+===== PORT 30080 =====
+HTTP/1.1 200 OK
+Server: openresty/1.27.1.2
+Date: Fri, 18 Sep 2026 12:39:32 GMT
+Content-Type: text/html
+Content-Length: 1207
+Last-Modified: Mon, 22 Sep 2025 18:05:09 GMT
+Connection: keep-alive
+ETag: "68d18fd5-4b7"
+Accept-Ranges: bytes
+
+

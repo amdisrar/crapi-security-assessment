@@ -1,0 +1,11 @@
+NAMES                         IMAGE                          PORTS
+crapi-web                     crapi/crapi-web:latest         0.0.0.0:8888->80/tcp, 0.0.0.0:30080->80/tcp, 0.0.0.0:8443->443/tcp, 0.0.0.0:30443->443/tcp
+crapi-workshop                crapi/crapi-workshop:latest    
+crapi-chatbot                 crapi/crapi-chatbot:latest     5002/tcp, 5500/tcp
+crapi-community               crapi/crapi-community:latest   6060/tcp
+crapi-identity                crapi/crapi-identity:latest    8080/tcp, 8989/tcp, 10001/tcp
+api.mypremiumdealership.com   crapi/gateway-service:latest   443/tcp
+postgresdb                    postgres:14                    5432/tcp
+mongodb                       mongo:4.4                      27017/tcp
+chromadb                      chromadb/chroma:latest         8000/tcp
+mailhog                       crapi/mailhog:latest           1025/tcp, 0.0.0.0:8025->8025/tcp

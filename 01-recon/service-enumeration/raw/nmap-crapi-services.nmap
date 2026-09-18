@@ -1,0 +1,13 @@
+# Nmap 7.99 scan initiated Fri Sep 18 16:33:44 2026 as: /usr/lib/nmap/nmap -Pn -sV -p 8025,8443,8888,30080,30443 -oA /home/israr/Documents/projects/crapi-security-assessment/01-recon/service-enumeration/raw/nmap-crapi-services 172.16.0.13
+Nmap scan report for 172.16.0.13
+Host is up.
+
+PORT      STATE    SERVICE        VERSION
+8025/tcp  filtered ca-audit-da
+8443/tcp  filtered https-alt
+8888/tcp  filtered sun-answerbook
+30080/tcp filtered unknown
+30443/tcp filtered unknown
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Fri Sep 18 16:33:47 2026 -- 1 IP address (1 host up) scanned in 3.68 seconds
