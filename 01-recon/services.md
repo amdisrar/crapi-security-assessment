@@ -15,7 +15,7 @@
 | Environment | UAT |
 | Related GitHub Issue | Issue #4 - Enumerate exposed hosts, ports and services |
 | Document Owner | Mr. Wario |
-| Version | 0.9 |
+| Version | 0.9.1 |
 | Status | Draft - Ready for Review |
 | Date Created | 18 September 2026 |
 | Classification | Engagement Confidential / Training Simulation |
@@ -29,6 +29,7 @@
 |---|---|---|---|
 | 0.1 | 18 September 2026 | Mr. Wario | Initial service-enumeration structure created |
 | 0.9 | 18 September 2026 | Mr. Wario | Added published services, Docker inventory, service validation, TLS observations, MailHog evidence and follow-up actions |
+| 0.9.1 | 18 September 2026 | Mr. Wario | Added commands used during service enumeration with a brief purpose for each command |
 
 ## Table of Contents
 
@@ -42,10 +43,11 @@
   - [5.2 MailHog Web Interface](#52-mailhog-web-interface)
 - [6. Docker-Internal Supporting Services](#6-docker-internal-supporting-services)
 - [7. Security-Relevant Reconnaissance Observations](#7-security-relevant-reconnaissance-observations)
-- [8. Evidence Index](#8-evidence-index)
-- [9. Limitations](#9-limitations)
-- [10. Follow-Up Actions](#10-follow-up-actions)
-- [11. Reconnaissance Summary](#11-reconnaissance-summary)
+- [8. Commands Used](#8-commands-used)
+- [9. Evidence Index](#9-evidence-index)
+- [10. Limitations](#10-limitations)
+- [11. Follow-Up Actions](#11-follow-up-actions)
+- [12. Reconnaissance Summary](#12-reconnaissance-summary)
 
 ## Purpose
 
@@ -192,7 +194,97 @@ No conclusion about the security posture of these internal services is made at t
 
 **Follow-up:** Review TLS and deployment configuration during Phase 2 security-misconfiguration testing.
 
-## 8. Evidence Index
+## 8. Commands Used
+
+The following commands were used during service enumeration. Repeated commands and equivalent variations are omitted for brevity. Each command is listed with its purpose; command output is documented elsewhere in this workpaper and supporting evidence files.
+
+### 8.1 Local TCP Listener Inspection
+
+Used to identify TCP ports listening on the Docker host and determine which processes were associated with those listeners.
+
+```bash
+sudo ss -lntp
+```
+
+### 8.2 Docker Container and Port Mapping Inspection
+
+Used to identify crAPI containers, container images, exposed container ports and ports published to the Docker host.
+
+```bash
+sudo docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}"
+```
+
+### 8.3 Targeted Nmap Service Detection
+
+Used to validate known crAPI-published ports and collect service/version fingerprints against the Kali LAN address.
+
+```bash
+sudo nmap -Pn -sV -p 8025,8443,8888,30080,30443 172.16.0.13
+```
+
+A second targeted scan was performed against localhost to validate service availability independently of LAN-path filtering behavior.
+
+```bash
+sudo nmap -Pn -sV -p 8025,8443,8888,30080,30443 127.0.0.1
+```
+
+### 8.4 HTTP Response Validation
+
+Used to confirm HTTP service availability and inspect response headers on the MailHog and crAPI HTTP listeners.
+
+```bash
+curl -sSI http://127.0.0.1:8025
+curl -sSI http://127.0.0.1:8888
+curl -sSI http://127.0.0.1:30080
+```
+
+### 8.5 HTTPS Response Validation
+
+Used to confirm HTTPS service availability and inspect response headers while allowing the lab certificate to be accepted during reconnaissance.
+
+```bash
+curl -skSI https://127.0.0.1:8443
+curl -skSI https://127.0.0.1:30443
+```
+
+### 8.6 Application Content Comparison
+
+Used to capture response bodies from the alternate HTTP and HTTPS entry points and determine whether they served the same logical frontend.
+
+```bash
+curl -sS http://127.0.0.1:8888 -o http-8888-body.txt
+curl -sS http://127.0.0.1:30080 -o http-30080-body.txt
+curl -skS https://127.0.0.1:8443 -o https-8443-body.txt
+curl -skS https://127.0.0.1:30443 -o https-30443-body.txt
+```
+
+The captured bodies were hashed to compare their content.
+
+```bash
+sha256sum http-8888-body.txt http-30080-body.txt https-8443-body.txt https-30443-body.txt
+```
+
+### 8.7 MailHog Content Identification
+
+Used to capture the MailHog page content and confirm the identity of the service from returned HTML.
+
+```bash
+curl -sS http://127.0.0.1:8025 -o mailhog-body.txt
+```
+
+### 8.8 TLS Certificate Inspection
+
+Used to inspect the certificates presented by the crAPI HTTPS listeners and compare certificate identity and validity information.
+
+```bash
+openssl s_client -connect 127.0.0.1:8443 -servername localhost </dev/null 2>/dev/null | openssl x509 -noout -subject -issuer -dates
+```
+
+```bash
+openssl s_client -connect 127.0.0.1:30443 -servername localhost </dev/null 2>/dev/null | openssl x509 -noout -subject -issuer -dates
+```
+
+## 9. Evidence Index
 
 | Evidence ID | Description | Repository Location |
 |---|---|---|
@@ -206,7 +298,7 @@ No conclusion about the security posture of these internal services is made at t
 
 Additional service-validation output can remain under `01-recon/raw/` and be added to this index if retained in Git.
 
-## 9. Limitations
+## 10. Limitations
 
 - Enumeration was intentionally limited to services associated with the crAPI Docker deployment.
 - Unrelated Kali Linux host services were not treated as assessment targets.
@@ -216,7 +308,7 @@ Additional service-validation output can remain under `01-recon/raw/` and be add
 - No denial-of-service, stress, brute-force or destructive activity was performed.
 - Product/version identification is based on observable fingerprints and may require confirmation during later white-box review.
 
-## 10. Follow-Up Actions
+## 11. Follow-Up Actions
 
 - **Issue #5 - Technology Fingerprinting:** Validate OpenResty/nginx and other observable technologies.
 - **Issue #6 - API Inventory:** Correlate frontend listeners with REST endpoints and routing.
@@ -226,7 +318,7 @@ Additional service-validation output can remain under `01-recon/raw/` and be add
 - **Issue #11 - External Integrations:** Review the premium-dealership gateway and other integrations.
 - **Issue #13 - Attack Surface and Test Cases:** Carry forward MailHog exposure and relevant service relationships.
 
-## 11. Reconnaissance Summary
+## 12. Reconnaissance Summary
 
 Issue #4 established the service-level exposure of the crAPI Docker deployment.
 
