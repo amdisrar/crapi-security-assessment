@@ -4,33 +4,6 @@
 
 > This document is part of a simulated white-box security assessment of OWASP crAPI for training and community reference. The client, contacts, scope details and engagement artifacts are fictitious.
 
-## Contents
-
-- [0a. Document Control and Revision History](#0a-document-control-and-revision-history)
-- [0b. Purpose](#0b-purpose)
-- [1. Application Context](#1-application-context)
-- [2. User and Account Management](#2-user-and-account-management)
-  - [2.1 Login](#21-login)
-  - [2.2 Registration](#22-registration)
-  - [2.3 Password Recovery / Password Change](#23-password-recovery--password-change)
-  - [2.4 User Profile Management](#24-user-profile-management)
-  - [2.5 Logout](#25-logout)
-- [3. Core Application Features](#3-core-application-features)
-  - [3.1 Dashboard / Home](#31-dashboard--home)
-  - [3.2 Vehicle Management](#32-vehicle-management)
-  - [3.3 Shop](#33-shop)
-  - [3.4 Coupon](#34-coupon)
-  - [3.5 Orders and Returns](#35-orders-and-returns)
-  - [3.6 Community](#36-community)
-- [4. Supporting and Extra Features](#4-supporting-and-extra-features)
-  - [4.1 ChatBot](#41-chatbot)
-  - [4.2 Email / MailHog](#42-email--mailhog)
-  - [4.3 Other External / Supporting Interactions](#43-other-external--supporting-interactions)
-- [5. Normal Workflow Summary](#5-normal-workflow-summary)
-- [6. Application Objects Observed](#6-application-objects-observed)
-- [7. Observations and Follow-up Reconnaissance](#7-observations-and-follow-up-reconnaissance)
-- [8. Functional Baseline Summary](#8-functional-baseline-summary)
-
 ## 0a. Document Control and Revision History
 
 | Field | Details |
@@ -60,6 +33,33 @@
 | 0.2 | 11 September 2026 | Mr. Wario | Added user-management, core-feature and supporting-feature observations |
 | 0.3 | 11 September 2026 | Mr. Wario | Added workflow summary, application objects and follow-up reconnaissance observations |
 | 1.0 | 12 September 2026 | Mr. Wario | Finalized Phase 1 application functional baseline for Issue #3 |
+
+## Table of Contents
+
+- [0a. Document Control and Revision History](#0a-document-control-and-revision-history)
+- [0b. Purpose](#0b-purpose)
+- [1. Application Context](#1-application-context)
+- [2. User and Account Management](#2-user-and-account-management)
+  - [2.1 Login](#21-login)
+  - [2.2 Registration](#22-registration)
+  - [2.3 Password Recovery / Password Change](#23-password-recovery--password-change)
+  - [2.4 User Profile Management](#24-user-profile-management)
+  - [2.5 Logout](#25-logout)
+- [3. Core Application Features](#3-core-application-features)
+  - [3.1 Dashboard / Home](#31-dashboard--home)
+  - [3.2 Vehicle Management](#32-vehicle-management)
+  - [3.3 Shop](#33-shop)
+  - [3.4 Coupon](#34-coupon)
+  - [3.5 Orders and Returns](#35-orders-and-returns)
+  - [3.6 Community](#36-community)
+- [4. Supporting and Extra Features](#4-supporting-and-extra-features)
+  - [4.1 ChatBot](#41-chatbot)
+  - [4.2 Email / MailHog](#42-email--mailhog)
+  - [4.3 Other External / Supporting Interactions](#43-other-external--supporting-interactions)
+- [5. Normal Workflow Summary](#5-normal-workflow-summary)
+- [6. Application Objects Observed](#6-application-objects-observed)
+- [7. Observations and Follow-up Reconnaissance](#7-observations-and-follow-up-reconnaissance)
+- [8. Functional Baseline Summary](#8-functional-baseline-summary)
 
 ## 0b. Purpose
 
