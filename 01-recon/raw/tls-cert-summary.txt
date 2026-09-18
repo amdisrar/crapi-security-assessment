@@ -1,0 +1,12 @@
+===== PORT 8443 =====
+subject=C=XX, ST=StateName, L=CityName, O=CompanyName, OU=CompanySectionName
+issuer=C=XX, ST=StateName, L=CityName, O=CompanyName, OU=CompanySectionName
+notBefore=Jul  5 09:29:39 2025 GMT
+notAfter=Jul  3 09:29:39 2035 GMT
+
+===== PORT 30443 =====
+subject=C=XX, ST=StateName, L=CityName, O=CompanyName, OU=CompanySectionName
+issuer=C=XX, ST=StateName, L=CityName, O=CompanyName, OU=CompanySectionName
+notBefore=Jul  5 09:29:39 2025 GMT
+notAfter=Jul  3 09:29:39 2035 GMT
+

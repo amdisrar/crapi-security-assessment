@@ -19,8 +19,8 @@
 | Status | Draft - Ready for Review |
 | Date Created | 18 September 2026 |
 | Classification | Engagement Confidential / Training Simulation |
-| Repository Location | `01-recon/service-enumeration/services.md` |
-| Evidence Location | `01-recon/service-enumeration/raw/` |
+| Repository Location | `01-recon/services.md` |
+| Evidence Location | `01-recon/raw/` |
 | Screenshot Location | `01-recon/screenshots/service-enum/` |
 
 ## Document Revision History
@@ -196,15 +196,15 @@ No conclusion about the security posture of these internal services is made at t
 
 | Evidence ID | Description | Repository Location |
 |---|---|---|
-| SVC-EV-001 | Local TCP listener inventory | `01-recon/service-enumeration/raw/tcp-listeners.txt` |
-| SVC-EV-002 | Docker container and published-port mapping | `01-recon/service-enumeration/raw/docker-port-mappings.txt` |
-| SVC-EV-003 | Targeted Nmap scan against crAPI-published ports using LAN address | `01-recon/service-enumeration/raw/nmap-crapi-services.nmap` |
-| SVC-EV-004 | Greppable Nmap output | `01-recon/service-enumeration/raw/nmap-crapi-services.gnmap` |
-| SVC-EV-005 | HTTP response-header checks | `01-recon/service-enumeration/raw/http-head-checks.txt` |
-| SVC-EV-006 | HTTPS response-header checks | `01-recon/service-enumeration/raw/https-head-checks.txt` |
+| SVC-EV-001 | Local TCP listener inventory | `01-recon/raw/tcp-listeners.txt` |
+| SVC-EV-002 | Docker container and published-port mapping | `01-recon/raw/docker-port-mappings.txt` |
+| SVC-EV-003 | Targeted Nmap scan against crAPI-published ports using LAN address | `01-recon/raw/nmap-crapi-services.nmap` |
+| SVC-EV-004 | Greppable Nmap output | `01-recon/raw/nmap-crapi-services.gnmap` |
+| SVC-EV-005 | HTTP response-header checks | `01-recon/raw/http-head-checks.txt` |
+| SVC-EV-006 | HTTPS response-header checks | `01-recon/raw/https-head-checks.txt` |
 | SVC-EV-007 | MailHog browser evidence | `01-recon/screenshots/service-enum/01-mailhog.jpg` |
 
-Additional service-validation output can remain under `01-recon/service-enumeration/raw/` and be added to this index if retained in Git.
+Additional service-validation output can remain under `01-recon/raw/` and be added to this index if retained in Git.
 
 ## 9. Limitations
 

@@ -1,0 +1,4 @@
+# Nmap 7.99 scan initiated Fri Sep 18 16:46:12 2026 as: /usr/lib/nmap/nmap -Pn -sV -p 8025,8443,8888,30080,30443 -oA /home/israr/Documents/projects/crapi-security-assessment/01-recon/service-enumeration/raw/nmap-crapi-local-services 127.0.0.1
+Host: 127.0.0.1 (localhost)	Status: Up
+Host: 127.0.0.1 (localhost)	Ports: 8025/open/tcp//http//Golang net|http server (Go-IPFS json-rpc or InfluxDB API)/, 8443/open/tcp//ssl|http//OpenResty web app server 1.27.1.2/, 8888/open/tcp//http//OpenResty web app server 1.27.1.2/, 30080/open/tcp//http//OpenResty web app server 1.27.1.2/, 30443/open/tcp//ssl|http//nginx/
+# Nmap done at Fri Sep 18 16:46:24 2026 -- 1 IP address (1 host up) scanned in 12.35 seconds
