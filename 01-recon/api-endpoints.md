@@ -15,8 +15,8 @@
 | Environment | UAT |
 | Related GitHub Issue | Issue #6 - Discover and inventory REST API endpoints |
 | Document Owner | Mr. Wario |
-| Version | 0.9 |
-| Status | Draft - Ready for Review |
+| Version | 1.0 |
+| Status | Reviewed - Complete |
 | Date Created | 19 September 2026 |
 | Classification | Engagement Confidential / Training Simulation |
 | Repository Location | `01-recon/api-endpoints.md` |
@@ -29,6 +29,7 @@
 |---|---|---|---|
 | 0.1 | 19 September 2026 | Mr. Wario | Initial API endpoint inventory structure created |
 | 0.9 | 19 September 2026 | Mr. Wario | Added source-discovered endpoints, access classification, user-controlled inputs, object identifiers, Burp runtime validation, commands used and security-relevant reconnaissance observations |
+| 1.0 | 19 September 2026 | Mr. Wario | Added runtime Swagger/OpenAPI/API-documentation validation result and completed workpaper review |
 
 ## Table of Contents
 
@@ -142,6 +143,8 @@ A final video workflow was captured and confirmed:
 - `PUT /identity/api/v2/user/videos/{video_id}` with a JSON body containing `videoName`
 
 The Burp runtime pass was intended to validate normal application behavior and correlate source-defined routes. Deliberate ID manipulation, authorization bypass attempts and active attack testing were deferred to Phase 2.
+
+Common Swagger, OpenAPI and API-documentation paths were also tested against the main crAPI application and relevant service prefixes. All tested documentation paths returned HTTP 404. No exposed Swagger, OpenAPI or other API-documentation endpoint was identified during runtime validation.
 
 ## 5. Identity Service API Inventory
 
@@ -526,14 +529,13 @@ The following limitations apply:
 - Some endpoints are internal, role-specific, conditional or not directly exposed by the normal frontend workflow.
 - Source-level access classification does not replace runtime authorization testing.
 - No authorization bypass, ID manipulation, injection or business-logic exploit attempts were performed as part of this endpoint-inventory task.
-- Swagger/OpenAPI/API-documentation endpoints were not provided by the client and no source-defined API documentation route was identified during the reviewed service routing. A dedicated runtime check can still be performed before Issue #6 is closed.
+- Swagger/OpenAPI/API-documentation endpoints were not provided by the client. Common documentation paths were tested at runtime against the main application and relevant service prefixes; all tested paths returned HTTP 404 and no exposed API-documentation endpoint was identified.
 - Burp-captured JWT values and other sensitive request data are not reproduced in this document.
 
 ## 15. Follow-Up Actions
 
 The following activities should be carried into later tasks:
 
-- perform a final Swagger/OpenAPI/API-doc runtime check
 - validate authentication boundaries
 - validate role-based authorization
 - test direct object references for BOLA/IDOR behavior
