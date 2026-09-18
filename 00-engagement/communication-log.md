@@ -16,10 +16,10 @@
 | Environment | UAT |
 | Security Assessment Lead | Mr. Wario – Application Security Expert |
 | Client Representative | Mr. Mario |
-| Version | 1.1 |
+| Version | 1.2 |
 | Classification | Confidential |
 | Status | Active – Update Throughout Engagement |
-| Last Updated | 12 September 2026 |
+| Last Updated | 18 September 2026 |
 
 ### Document Revision History
 
@@ -27,6 +27,7 @@
 |---|---|---|---|
 | 1.0 | 11-Sep-2026 | Mr. Wario | Created Phase 0 communication record |
 | 1.1 | 12-Sep-2026 | Mr. Wario | Added application baseline completion, client review request, technical reconnaissance notice and remote-access confirmation |
+| 1.2 | 18-Sep-2026 | Mr. Wario | Added service-enumeration completion update and client clarification regarding API documentation and white-box exploration |
 
 ---
 
@@ -264,12 +265,63 @@ Client Representative
 
 ---
 
+
+# Communication 009 – Service Enumeration Completed and API Discovery Information Request
+
+**Date:** 18 September 2026  
+**From:** Mr. Wario  
+**To:** Mr. Mario  
+**Subject:** crAPI Service Enumeration Completed – API Discovery to Begin
+
+Dear Mr. Mario,
+
+The service-enumeration activity for the crAPI UAT environment has now been completed.
+
+The assessment has documented the application-facing services, published Docker ports, supporting internal services and relevant service-level observations required for the next stage of reconnaissance. Technology fingerprinting has also progressed sufficiently to support deeper API review.
+
+I will now begin API endpoint discovery and inventory. The objective is to identify the REST endpoints used by the application, understand their methods, parameters and request/response structures, and map authentication or role requirements where they can be determined.
+
+Before proceeding further, please confirm whether any API documentation, Swagger/OpenAPI specification, Postman collection, developer notes, architecture references or endpoint lists are available for the current UAT application.
+
+If documentation is not available, please also confirm that the approved white-box scope permits endpoint discovery through the running application, normal application traffic and review of the available application source code and configuration.
+
+Regards,  
+**Mr. Wario**  
+Application Security Expert
+
+---
+
+# Communication 010 – Client Response on API Documentation and White-Box Access
+
+**Date:** 18 September 2026  
+**From:** Mr. Mario  
+**To:** Mr. Wario  
+**Subject:** RE: crAPI Service Enumeration Completed – API Discovery to Begin
+
+Dear Mr. Wario,
+
+Thank you for the update.
+
+I joined this environment recently and do not currently have any API documentation, Swagger/OpenAPI specification, Postman collection or complete endpoint list available for the application.
+
+Please proceed with the API discovery activities using the running UAT application and the available source code and configuration. You may review application traffic, application behavior and the relevant code as needed within the approved white-box assessment scope.
+
+The existing Rules of Engagement and assessment restrictions continue to apply.
+
+Regards,  
+**Mr. Mario**  
+Client Representative
+
+---
+
 ## Communication Log Status
 
 **Phase 0:** Completed  
 **Phase 1 – Application Baseline:** Completed  
-**Current Phase:** Phase 1 – Technical Reconnaissance  
-**Current Planned Activities:** Service enumeration, technology fingerprinting, API discovery, authentication/authorization mapping, Docker architecture review and integration/data-flow validation  
+**Phase 1 – Service Enumeration:** Completed  
+**Phase 1 – Technology Fingerprinting:** Completed  
+**Current Phase:** Phase 1 – API Discovery and Inventory  
+**Current Planned Activities:** API endpoint discovery, authentication/authorization mapping, API-version review, Docker architecture review and integration/data-flow validation  
 **Remote Access:** Approved and arranged; credentials/details exchanged separately through the approved secure channel
 
 This communication record should be updated whenever a material engagement decision, approval, escalation, scope change, High/Critical finding notification, remediation discussion or retest decision occurs.
