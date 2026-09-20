@@ -475,7 +475,7 @@ Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result wa
 | Reused OTP test | Burp Repeater | OTP single-use behavior |
 | Failed OTP attempt sequence | Burp Repeater | Attempt-limit behavior |
 | New OTP after attempt limit | Burp Repeater | Attempt-counter reset behavior |
-| Pre-reset JWT replay after password reset | Burp Repeater | Existing-token behavior after recovery |
+| Pre-reset JWT replay after password reset | Burp Repeater | Confirms a JWT issued before password reset remains valid after the reset and can continue to be accepted for up to its original ~7-day lifetime, until normal token expiry |
 
 ## 15. Limitations
 
