@@ -33,29 +33,29 @@
 
 ## Table of Contents
 
-- [Purpose](#purpose)
-- [1. Scope](#1-scope)
-- [2. Assessment Methodology](#2-assessment-methodology)
-- [3. Authentication Flow](#3-authentication-flow)
-- [4. JWT Structure and Lifetime](#4-jwt-structure-and-lifetime)
-- [5. JWT Validation Behavior](#5-jwt-validation-behavior)
-- [6. Client-Side Token Storage](#6-client-side-token-storage)
-- [7. Logout and Token Revocation](#7-logout-and-token-revocation)
-- [8. Password Reset and Account Recovery](#8-password-reset-and-account-recovery)
-- [9. OTP Security Controls](#9-otp-security-controls)
-- [10. Password Reset and Existing JWTs](#10-password-reset-and-existing-jwts)
-- [11. Security-Relevant Reconnaissance Observations](#11-security-relevant-reconnaissance-observations)
-- [12. Commands Used](#12-commands-used)
-- [13. Evidence Index](#13-evidence-index)
-- [14. Limitations](#14-limitations)
-- [15. Follow-Up Actions](#15-follow-up-actions)
-- [16. Authentication Reconnaissance Summary](#16-authentication-reconnaissance-summary)
-- [17. Authorization Model - Issue #8](#17-authorization-model---issue-8)
-- [18. Role and Permission Matrix](#18-role-and-permission-matrix)
-- [19. Object Ownership Model](#19-object-ownership-model)
-- [20. Candidate Authorization Test Cases](#20-candidate-authorization-test-cases)
+- [1. Purpose](#1-purpose)
+- [2. Scope](#1-scope)
+- [3. Assessment Methodology](#2-assessment-methodology)
+- [4. Authentication Flow](#3-authentication-flow)
+- [5. JWT Structure and Lifetime](#4-jwt-structure-and-lifetime)
+- [6. JWT Validation Behavior](#5-jwt-validation-behavior)
+- [7. Client-Side Token Storage](#6-client-side-token-storage)
+- [8. Logout and Token Revocation](#7-logout-and-token-revocation)
+- [9. Password Reset and Account Recovery](#8-password-reset-and-account-recovery)
+- [10. OTP Security Controls](#9-otp-security-controls)
+- [11. Password Reset and Existing JWTs](#10-password-reset-and-existing-jwts)
+- [12. Security-Relevant Reconnaissance Observations](#11-security-relevant-reconnaissance-observations)
+- [13. Commands Used](#12-commands-used)
+- [14. Evidence Index](#13-evidence-index)
+- [15. Limitations](#14-limitations)
+- [16. Follow-Up Actions](#15-follow-up-actions)
+- [17. Authentication Reconnaissance Summary](#16-authentication-reconnaissance-summary)
+- [18. Authorization Model - Issue #8](#17-authorization-model---issue-8)
+- [19. Role and Permission Matrix](#18-role-and-permission-matrix)
+- [20. Object Ownership Model](#19-object-ownership-model)
+- [21. Candidate Authorization Test Cases](#20-candidate-authorization-test-cases)
 
-## Purpose
+## 1. Purpose
 
 Document how crAPI authenticates users, maintains authenticated state, handles JWTs and account recovery, and subsequently map the application's authorization boundaries within the same workpaper.
 
@@ -63,7 +63,7 @@ Issue #7 establishes the authentication and session model. Issue #8 will extend 
 
 Security-relevant observations are reconnaissance items unless explicitly identified as candidate findings. Exploitability and impact will be validated during later assessment phases.
 
-## 1. Scope
+## 2. Scope
 
 Authentication and session reconnaissance was limited to the approved local crAPI environment.
 
@@ -80,7 +80,7 @@ The Issue #7 assessment covered:
 
 Issue #8 authorization mapping will be added to the same document.
 
-## 2. Assessment Methodology
+## 3. Assessment Methodology
 
 Issue #7 was assessed primarily through manual black-box testing and controlled runtime inspection.
 
@@ -97,7 +97,7 @@ Activities included:
 
 No conclusion in this document is based only on endpoint naming. Runtime behavior was verified where noted.
 
-## 3. Authentication Flow
+## 4. Authentication Flow
 
 ### 3.1 Login Endpoint
 
@@ -140,7 +140,7 @@ Observed behavior:
 
 **Observed conclusion:** the JWT Bearer token is the effective authentication credential for this tested API request.
 
-## 4. JWT Structure and Lifetime
+## 5. JWT Structure and Lifetime
 
 A JWT contains three dot-separated sections:
 
@@ -194,7 +194,7 @@ exp - iat = 604800 seconds
 
 **Observed JWT lifetime: approximately 7 days.**
 
-## 5. JWT Validation Behavior
+## 6. JWT Validation Behavior
 
 ### 5.1 Missing Token
 
@@ -211,7 +211,7 @@ Changing one character in the JWT caused the request to be rejected with HTTP 40
 
 **Observed behavior:** altered JWTs are rejected, consistent with token integrity/signature validation being enforced.
 
-## 6. Client-Side Token Storage
+## 7. Client-Side Token Storage
 
 Browser Developer Tools showed the JWT stored in **Local Storage**.
 
@@ -233,7 +233,7 @@ accessToken = ""
 
 **Observed behavior:** logout clears the authentication token from browser Local Storage.
 
-## 7. Logout and Token Revocation
+## 8. Logout and Token Revocation
 
 No dedicated backend logout request was observed during the tested logout action.
 
@@ -255,7 +255,7 @@ After logout:
 
 Because the observed JWT lifetime is approximately 7 days, a copied token may remain usable after logout until expiry based on the tested behavior.
 
-## 8. Password Reset and Account Recovery
+## 9. Password Reset and Account Recovery
 
 ### 8.1 Password Reset Request
 
@@ -315,7 +315,7 @@ The new password authenticated successfully afterward and the previous password 
 
 **Observed conclusion:** `/identity/api/auth/v3/check-otp` performs the password change as part of successful OTP verification.
 
-## 9. OTP Security Controls
+## 10. OTP Security Controls
 
 ### 9.1 OTP Length
 
@@ -368,7 +368,7 @@ Observed validation/error conditions used server/service error codes:
 
 These are recorded as API/error-handling observations. More typical client-side validation responses would generally use 4xx status codes.
 
-## 10. Password Reset and Existing JWTs
+## 11. Password Reset and Existing JWTs
 
 A JWT issued before the password reset was retained in Burp Repeater.
 
@@ -396,7 +396,7 @@ Security relevance:
 
 A password reset may be used when an account compromise is suspected. If a valid JWT has already been copied, the password reset does not remove that token's access based on the observed behavior. The token may remain usable until its normal expiry.
 
-## 11. Security-Relevant Reconnaissance Observations
+## 12. Security-Relevant Reconnaissance Observations
 
 | Observation | Current Interpretation |
 |---|---|
@@ -414,7 +414,7 @@ A password reset may be used when an account compromise is suspected. If a valid
 | Pre-reset JWT survives password reset | Candidate security finding |
 | OTP errors use HTTP 500/503 | API/error-handling observation |
 
-## 12. Commands Used
+## 13. Commands Used
 
 The following commands were used during manual JWT analysis.
 
@@ -459,7 +459,7 @@ echo $((1790496980 - 1789892180))
 
 Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result was 604800 seconds, or 7 days.
 
-## 13. Evidence Index
+## 14. Evidence Index
 
 | Evidence | Source / Location | Relevance |
 |---|---|---|
@@ -477,7 +477,7 @@ Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result wa
 | New OTP after attempt limit | Burp Repeater | Attempt-counter reset behavior |
 | Pre-reset JWT replay after password reset | Burp Repeater | Existing-token behavior after recovery |
 
-## 14. Limitations
+## 15. Limitations
 
 - Issue #7 focused on observed runtime authentication behavior and did not perform a full source-code review of token-generation or revocation internals.
 - No exhaustive JWT algorithm-confusion or cryptographic attack testing was performed during this reconnaissance step.
@@ -486,7 +486,7 @@ Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result wa
 - Password policy has not yet been fully assessed.
 - Authorization mapping is intentionally deferred to Issue #8 and will be added to this same document.
 
-## 15. Follow-Up Actions
+## 16. Follow-Up Actions
 
 - Continue Issue #8 in this document and build the role/permission matrix.
 - Identify ownership relationships between users, vehicles, orders, posts and other objects.
@@ -496,7 +496,7 @@ Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result wa
 - Compare normal password-change behavior with password-reset behavior for existing JWTs.
 - Carry the pre-reset JWT behavior into Phase 2 for formal finding validation and impact assessment.
 
-## 16. Authentication Reconnaissance Summary
+## 17. Authentication Reconnaissance Summary
 
 | Area | Observed Behavior |
 |---|---|
@@ -520,7 +520,7 @@ Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result wa
 
 Issue #7 authentication/session reconnaissance is substantially documented. The document remains **Draft** because Issue #8 authorization mapping is still pending.
 
-## 17. Authorization Model - Issue #8
+## 18. Authorization Model - Issue #8
 
 Issue #8 will continue within this same workpaper.
 
@@ -534,14 +534,14 @@ Planned coverage:
 - privileged/admin-only operations;
 - candidate BOLA, BOPLA and BFLA test cases.
 
-## 18. Role and Permission Matrix
+## 19. Role and Permission Matrix
 
 _To be completed during Issue #8._
 
-## 19. Object Ownership Model
+## 20. Object Ownership Model
 
 _To be completed during Issue #8._
 
-## 20. Candidate Authorization Test Cases
+## 21. Candidate Authorization Test Cases
 
 _To be completed during Issue #8._
