@@ -1,28 +1,105 @@
-# Authentication, Session and Authorization Model
+# crAPI Application Security Assessment - Authentication and Authorization Model
 
-> Shared reconnaissance document for:
-> - Issue #7 — Map authentication, sessions and token handling
-> - Issue #8 — Identify roles and authorization boundaries
->
-> Issue #7 findings are documented below. Authorization mapping for Issue #8 will be added to the same document.
+## Important Info
+> This document is part of a simulated white-box security assessment of OWASP crAPI for training and community reference. The client, contacts, scope details and engagement artifacts are fictitious.
+
+## Document Control
+
+| Field | Details |
+|---|---|
+| Document Title | crAPI Application Security Assessment - Authentication and Authorization Model |
+| Document Type | Phase 1 Reconnaissance |
+| Engagement | crAPI Application Security Assessment |
+| Client Representative | Mr. Mario |
+| Assessment Lead | Mr. Wario |
+| Environment | UAT |
+| Related GitHub Issues | Issue #7 - Map authentication, sessions and token handling; Issue #8 - Identify roles and authorization boundaries |
+| Document Owner | Mr. Wario |
+| Version | 0.9 |
+| Status | Draft - Issue #7 documented / Issue #8 pending |
+| Date Created | 20 September 2026 |
+| Classification | Engagement Confidential / Training Simulation |
+| Repository Location | `01-recon/auth-authz-model.md` |
+| Evidence Location | `01-recon/raw/` |
+| Screenshot Location | `01-recon/screenshots/` |
+
+## Document Revision History
+
+| Version | Date | Author | Description |
+|---|---|---|---|
+| 0.1 | 20 September 2026 | Mr. Wario | Initial authentication and session workpaper created |
+| 0.8 | 20 September 2026 | Mr. Wario | Added JWT, token storage, logout, password recovery, OTP and token-revocation observations |
+| 0.9 | 20 September 2026 | Mr. Wario | Aligned document with the Phase 1 reconnaissance workpaper format and prepared shared authorization sections for Issue #8 |
+
+## Table of Contents
+
+- [Purpose](#purpose)
+- [1. Scope](#1-scope)
+- [2. Assessment Methodology](#2-assessment-methodology)
+- [3. Authentication Flow](#3-authentication-flow)
+- [4. JWT Structure and Lifetime](#4-jwt-structure-and-lifetime)
+- [5. JWT Validation Behavior](#5-jwt-validation-behavior)
+- [6. Client-Side Token Storage](#6-client-side-token-storage)
+- [7. Logout and Token Revocation](#7-logout-and-token-revocation)
+- [8. Password Reset and Account Recovery](#8-password-reset-and-account-recovery)
+- [9. OTP Security Controls](#9-otp-security-controls)
+- [10. Password Reset and Existing JWTs](#10-password-reset-and-existing-jwts)
+- [11. Security-Relevant Reconnaissance Observations](#11-security-relevant-reconnaissance-observations)
+- [12. Commands Used](#12-commands-used)
+- [13. Evidence Index](#13-evidence-index)
+- [14. Limitations](#14-limitations)
+- [15. Follow-Up Actions](#15-follow-up-actions)
+- [16. Authentication Reconnaissance Summary](#16-authentication-reconnaissance-summary)
+- [17. Authorization Model - Issue #8](#17-authorization-model---issue-8)
+- [18. Role and Permission Matrix](#18-role-and-permission-matrix)
+- [19. Object Ownership Model](#19-object-ownership-model)
+- [20. Candidate Authorization Test Cases](#20-candidate-authorization-test-cases)
+
+## Purpose
+
+Document how crAPI authenticates users, maintains authenticated state, handles JWTs and account recovery, and subsequently map the application's authorization boundaries within the same workpaper.
+
+Issue #7 establishes the authentication and session model. Issue #8 will extend the same document with roles, permissions, object ownership and candidate authorization test cases.
+
+Security-relevant observations are reconnaissance items unless explicitly identified as candidate findings. Exploitability and impact will be validated during later assessment phases.
 
 ## 1. Scope
 
-This document records observed authentication, session/token, password-recovery and authorization behavior in the local OWASP crAPI lab.
+Authentication and session reconnaissance was limited to the approved local crAPI environment.
 
-The approach used for Issue #7 was primarily black-box/manual:
+The Issue #7 assessment covered:
+
+- login and authenticated API behavior;
+- JWT structure and lifetime;
+- token storage and transmission;
+- behavior when authentication is removed or altered;
+- logout handling;
+- password recovery and OTP behavior;
+- OTP reuse and failed-attempt handling;
+- behavior of existing JWTs after password reset.
+
+Issue #8 authorization mapping will be added to the same document.
+
+## 2. Assessment Methodology
+
+Issue #7 was assessed primarily through manual black-box testing and controlled runtime inspection.
+
+Activities included:
+
 - normal application use through Burp Browser;
-- request/response inspection in Burp Proxy;
-- controlled request replay and modification in Burp Repeater;
-- browser storage inspection through Developer Tools.
+- request and response inspection in Burp Proxy HTTP history;
+- controlled replay and modification using Burp Repeater;
+- JWT Base64URL decoding to inspect token header and payload;
+- Unix timestamp conversion and lifetime calculation;
+- browser Local Storage and Session Storage inspection using Developer Tools;
+- manual password-recovery and OTP workflow validation;
+- limited manual OTP attempt testing to understand the observed attempt-control behavior.
 
-No conclusion below is based only on an endpoint name; behavior was verified where noted.
+No conclusion in this document is based only on endpoint naming. Runtime behavior was verified where noted.
 
----
+## 3. Authentication Flow
 
-## 2. Authentication Flow
-
-### 2.1 Login endpoint
+### 3.1 Login Endpoint
 
 Observed endpoint:
 
@@ -39,51 +116,41 @@ Observed request body:
 }
 ```
 
-A successful login returned HTTP 200 and a JSON response containing:
+A successful login returned HTTP 200 with a token, token type `Bearer`, `Login successful`, and `mfaRequired: false`.
 
-- a token;
-- token type `Bearer`;
-- `Login successful`;
-- `mfaRequired: false`.
+### 3.2 Authentication Mechanism
 
-### 2.2 Authentication mechanism
-
-crAPI uses a JWT Bearer token for authenticated API requests.
-
-Example:
+Authenticated API requests use a JWT Bearer token:
 
 ```http
 Authorization: Bearer <JWT>
 ```
 
-A request to:
+The following request was used as a controlled test:
 
 ```http
 GET /identity/api/v2/vehicle/vehicles
 ```
 
-returned:
+Observed behavior:
 
-- HTTP 200 with a valid JWT;
-- HTTP 401 `Invalid Token` when the Authorization header was removed.
+- valid JWT -> HTTP 200;
+- Authorization header removed -> HTTP 401 `Invalid Token`;
+- the existing `chat_session_id` cookie alone did not authenticate the endpoint.
 
-The existing `chat_session_id` cookie alone did not authenticate this tested endpoint.
+**Observed conclusion:** the JWT Bearer token is the effective authentication credential for this tested API request.
 
-**Conclusion:** the JWT Bearer token is the effective authentication credential for this API request.
+## 4. JWT Structure and Lifetime
 
----
-
-## 3. JWT Structure
-
-The JWT contains three dot-separated sections:
+A JWT contains three dot-separated sections:
 
 ```text
 HEADER.PAYLOAD.SIGNATURE
 ```
 
-The header and payload were Base64URL-decoded for inspection. Base64/Base64URL is encoding, not encryption; decoding only converts the stored representation back into readable data.
+The header and payload were Base64URL-decoded for inspection. Base64/Base64URL is encoding, not encryption.
 
-### 3.1 Header
+### 4.1 JWT Header
 
 Decoded header:
 
@@ -95,7 +162,7 @@ Decoded header:
 
 Observed signing algorithm: **RS256**.
 
-### 3.2 Payload
+### 4.2 JWT Payload
 
 Decoded payload:
 
@@ -108,16 +175,14 @@ Decoded payload:
 }
 ```
 
-Observed claims:
-
-| Claim | Observed meaning |
+| Claim | Observed Meaning |
 |---|---|
 | `sub` | User identity / subject, represented by email |
 | `iat` | Token issue time |
 | `exp` | Token expiry time |
 | `role` | User role |
 
-### 3.3 Token lifetime
+### 4.3 Token Lifetime
 
 Observed:
 
@@ -129,30 +194,28 @@ exp - iat = 604800 seconds
 
 **Observed JWT lifetime: approximately 7 days.**
 
----
+## 5. JWT Validation Behavior
 
-## 4. JWT Validation Behavior
+### 5.1 Missing Token
 
-### 4.1 Missing token
-
-Removing the complete `Authorization: Bearer ...` header from an authenticated request resulted in:
+Removing the complete Authorization header produced:
 
 ```text
 HTTP 401
 CRAPIResponse(message=Invalid Token, status=401)
 ```
 
-### 4.2 Modified token
+### 5.2 Modified Token
 
 Changing one character in the JWT caused the request to be rejected with HTTP 401 `Invalid Token`.
 
-**Observed behavior:** altered JWTs are rejected. This is consistent with token integrity/signature validation being enforced.
+**Observed behavior:** altered JWTs are rejected, consistent with token integrity/signature validation being enforced.
 
----
+## 6. Client-Side Token Storage
 
-## 5. Client-Side Token Storage
+Browser Developer Tools showed the JWT stored in **Local Storage**.
 
-Browser Developer Tools showed the JWT stored in **Local Storage**, under application state containing:
+Observed authenticated state:
 
 ```text
 isLoggedIn = true
@@ -168,15 +231,11 @@ isLoggedIn = false
 accessToken = ""
 ```
 
-Other user-related client state was also cleared.
-
 **Observed behavior:** logout clears the authentication token from browser Local Storage.
 
----
+## 7. Logout and Token Revocation
 
-## 6. Logout and Token Revocation
-
-No dedicated backend logout request was observed in Burp traffic during the tested logout action.
+No dedicated backend logout request was observed during the tested logout action.
 
 The endpoint:
 
@@ -184,25 +243,21 @@ The endpoint:
 POST /identity/api/auth/verify
 ```
 
-was observed, but it verifies whether a JWT is valid; it is not a logout endpoint.
+was observed, but its tested behavior was token verification rather than logout.
 
 After logout:
 
-1. browser Local Storage no longer contained the access token;
-2. the JWT captured before logout was replayed in Burp Repeater;
-3. the old JWT still received HTTP 200 from an authenticated API endpoint.
+1. Local Storage no longer contained the access token;
+2. the JWT captured before logout was retained in Burp Repeater;
+3. the old JWT still received HTTP 200 from the authenticated vehicle endpoint.
 
 **Observed behavior:** normal logout clears the client-side token but does not invalidate the previously issued JWT on the server.
 
-### Security relevance
+Because the observed JWT lifetime is approximately 7 days, a copied token may remain usable after logout until expiry based on the tested behavior.
 
-Because the observed JWT lifetime is approximately 7 days, a previously copied token can remain usable after logout until it expires, based on the tested behavior.
+## 8. Password Reset and Account Recovery
 
----
-
-## 7. Password Reset / Account Recovery
-
-### 7.1 Password reset request
+### 8.1 Password Reset Request
 
 Observed endpoint:
 
@@ -227,9 +282,9 @@ Observed response:
 }
 ```
 
-The OTP itself was delivered through the lab email service and was not returned by this API response.
+The OTP was delivered through the lab email service and was not returned in the API response.
 
-### 7.2 OTP verification and password change
+### 8.2 OTP Verification and Password Change
 
 Observed endpoint:
 
@@ -256,29 +311,25 @@ Observed response:
 }
 ```
 
-The new password successfully authenticated afterward and the previous password no longer worked.
+The new password authenticated successfully afterward and the previous password no longer worked.
 
-**Conclusion:** `/identity/api/auth/v3/check-otp` performs the password change as part of successful OTP verification.
+**Observed conclusion:** `/identity/api/auth/v3/check-otp` performs the password change as part of successful OTP verification.
 
----
+## 9. OTP Security Controls
 
-## 8. OTP Security Controls
+### 9.1 OTP Length
 
-### 8.1 OTP length
-
-Observed OTP was four numeric digits.
-
-A four-digit numeric OTP has:
+The observed OTP was four numeric digits.
 
 ```text
-0000–9999 = 10,000 possible values
+0000-9999 = 10,000 possible values
 ```
 
-This makes attempt limiting an important compensating control.
+Attempt limiting is therefore an important compensating control.
 
-### 8.2 OTP reuse
+### 9.2 OTP Reuse
 
-After an OTP had been successfully used to reset the password, replaying the same OTP produced:
+After successful use, replaying the same OTP produced:
 
 ```json
 {
@@ -287,17 +338,11 @@ After an OTP had been successfully used to reset the password, replaying the sam
 }
 ```
 
-**Observed behavior:** a successfully used OTP is single-use.
+**Observed behavior:** successfully used OTPs are single-use.
 
-### 8.3 Failed-attempt limit
+### 9.3 Failed-Attempt Limit
 
-After approximately 10 incorrect OTP submissions in a fresh reset flow, the API returned:
-
-```http
-HTTP/1.1 503
-```
-
-with:
+After approximately 10 incorrect OTP submissions in a fresh reset flow, the API returned HTTP 503 with:
 
 ```json
 {
@@ -308,26 +353,24 @@ with:
 
 **Observed behavior:** an OTP attempt limit exists at approximately 10 failed attempts.
 
-### 8.4 Counter reset
+### 9.4 Counter Reset
 
-Requesting a new OTP for the same test user reset the failed-attempt counter. The new OTP was successfully accepted and the attempt count started again from the beginning.
+Requesting a new OTP for the same user reset the failed-attempt counter. The newly issued OTP was accepted successfully.
 
-**Observed behavior:** the failed-attempt counter is associated with the active OTP/reset cycle rather than acting as a persistent account lockout.
+**Observed behavior:** the attempt counter is associated with the active OTP/reset cycle rather than a persistent account lockout.
 
-### 8.5 HTTP status-code observations
+### 9.5 HTTP Status-Code Behavior
 
-Some expected client-side validation failures were represented using server/service error codes:
+Observed validation/error conditions used server/service error codes:
 
-- invalid/reused OTP: HTTP 500;
-- exceeded OTP attempts: HTTP 503.
+- invalid/reused OTP -> HTTP 500;
+- exceeded OTP attempts -> HTTP 503.
 
-These are recorded as API/error-handling observations. More typical status codes for such conditions would normally be in the 4xx range.
+These are recorded as API/error-handling observations. More typical client-side validation responses would generally use 4xx status codes.
 
----
+## 10. Password Reset and Existing JWTs
 
-## 9. Password Reset and Existing JWTs
-
-A JWT that had been issued **before** the password reset was preserved in Burp Repeater.
+A JWT issued before the password reset was retained in Burp Repeater.
 
 After:
 
@@ -345,78 +388,160 @@ The server still returned HTTP 200.
 
 **Observed behavior:** password reset does not invalidate JWTs that were issued before the reset.
 
-### Candidate security finding
+### Candidate Security Finding
 
 **Previously issued JWTs remain valid after password reset.**
 
-Security impact to validate/report in the testing/findings phase:
+Security relevance:
 
-A password reset may be used to recover an account after suspected compromise. If an attacker already possesses a valid JWT, changing/resetting the password does not remove that token's access based on the observed behavior. The token can remain usable until its normal expiry.
+A password reset may be used when an account compromise is suspected. If a valid JWT has already been copied, the password reset does not remove that token's access based on the observed behavior. The token may remain usable until its normal expiry.
 
-This is more security-relevant than client-side logout behavior because password recovery is expected to help regain control of a potentially compromised account.
+## 11. Security-Relevant Reconnaissance Observations
 
----
+| Observation | Current Interpretation |
+|---|---|
+| JWT Bearer authentication is used | Confirmed runtime behavior |
+| JWT uses RS256 | Confirmed by decoded header |
+| JWT lifetime is approximately 7 days | Confirmed from `iat` and `exp` |
+| JWT stored in Local Storage | Confirmed in browser Developer Tools |
+| Missing JWT rejected | Positive authentication control |
+| Modified JWT rejected | Positive token-integrity control |
+| Logout clears browser token only | Old JWT remained valid after logout |
+| Password reset uses 4-digit OTP | Confirmed runtime behavior |
+| Used OTP cannot be replayed | Positive OTP control |
+| OTP failed-attempt control exists | Approximately 10 incorrect attempts |
+| New OTP resets attempt counter | Confirmed runtime behavior |
+| Pre-reset JWT survives password reset | Candidate security finding |
+| OTP errors use HTTP 500/503 | API/error-handling observation |
 
-## 10. Issue #7 Summary
+## 12. Commands Used
 
-| Area | Observed behavior |
+The following commands were used during manual JWT analysis.
+
+### 12.1 Decode JWT Header
+
+```bash
+echo "$TOKEN" | cut -d '.' -f1 | base64 -d
+```
+
+Purpose:
+
+- `cut -d '.' -f1` selects the first dot-separated JWT section;
+- `base64 -d` decodes the encoded header into readable JSON.
+
+### 12.2 Decode JWT Payload
+
+```bash
+echo "$TOKEN" | cut -d '.' -f2 | base64 -d
+```
+
+Purpose:
+
+- selects the second JWT section;
+- decodes the payload into readable JSON.
+
+JWT uses Base64URL encoding. Direct `base64 -d` worked for the observed token values; padding or URL-safe character handling may be required for other JWTs.
+
+### 12.3 Convert Unix Timestamps
+
+```bash
+date -d @1789892180
+date -d @1790496980
+```
+
+Purpose: convert JWT `iat` and `exp` Unix timestamps into readable date/time values.
+
+### 12.4 Calculate Token Lifetime
+
+```bash
+echo $((1790496980 - 1789892180))
+```
+
+Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result was 604800 seconds, or 7 days.
+
+## 13. Evidence Index
+
+| Evidence | Source / Location | Relevance |
+|---|---|---|
+| Login request/response | Burp Proxy HTTP history | JWT issuance and Bearer token type |
+| Authenticated vehicle request | Burp Repeater | Valid-token baseline |
+| Request without Authorization header | Burp Repeater | Missing-token rejection |
+| Modified JWT request | Burp Repeater | Token-integrity validation |
+| Local Storage before/after logout | Browser Developer Tools | Client-side token storage and clearing |
+| Old JWT replay after logout | Burp Repeater | Logout token-revocation behavior |
+| Forgot-password request | Burp Proxy HTTP history | Password-recovery initiation |
+| OTP email | MailHog | OTP delivery |
+| `/auth/v3/check-otp` request | Burp Proxy / Repeater | OTP verification and password change |
+| Reused OTP test | Burp Repeater | OTP single-use behavior |
+| Failed OTP attempt sequence | Burp Repeater | Attempt-limit behavior |
+| New OTP after attempt limit | Burp Repeater | Attempt-counter reset behavior |
+| Pre-reset JWT replay after password reset | Burp Repeater | Existing-token behavior after recovery |
+
+## 14. Limitations
+
+- Issue #7 focused on observed runtime authentication behavior and did not perform a full source-code review of token-generation or revocation internals.
+- No exhaustive JWT algorithm-confusion or cryptographic attack testing was performed during this reconnaissance step.
+- OTP testing was limited to controlled manual attempts in the local lab.
+- Refresh-token behavior was not observed during the tested workflows.
+- Password policy has not yet been fully assessed.
+- Authorization mapping is intentionally deferred to Issue #8 and will be added to this same document.
+
+## 15. Follow-Up Actions
+
+- Continue Issue #8 in this document and build the role/permission matrix.
+- Identify ownership relationships between users, vehicles, orders, posts and other objects.
+- Validate candidate BOLA, BOPLA and BFLA cases during authorization testing.
+- Assess password policy and account-enumeration behavior.
+- Determine whether any refresh-token mechanism exists.
+- Compare normal password-change behavior with password-reset behavior for existing JWTs.
+- Carry the pre-reset JWT behavior into Phase 2 for formal finding validation and impact assessment.
+
+## 16. Authentication Reconnaissance Summary
+
+| Area | Observed Behavior |
 |---|---|
 | Authentication | JWT Bearer token |
 | JWT algorithm | RS256 |
 | Identity claim | Email in `sub` |
 | Role claim | `role: user` |
-| Token lifetime | ~7 days |
+| Token lifetime | Approximately 7 days |
 | Client storage | Local Storage |
-| Missing JWT | Rejected with HTTP 401 |
-| Modified JWT | Rejected with HTTP 401 |
+| Missing JWT | HTTP 401 |
+| Modified JWT | HTTP 401 |
 | Logout | Clears Local Storage token |
-| Server-side logout revocation | Not observed; old token remained valid |
+| Server-side logout revocation | Not observed |
 | Password reset | Email + OTP + new password |
 | OTP length | 4 numeric digits |
 | OTP reuse | Rejected |
-| OTP attempt limit | ~10 failed attempts |
+| OTP attempt limit | Approximately 10 failed attempts |
 | New OTP | Resets attempt counter |
 | Password reset revokes old JWTs | No; pre-reset JWT remained valid |
-| Error handling | Invalid OTP/attempt limit use 500/503 responses |
+| Error handling | Invalid OTP / attempt limit use HTTP 500/503 |
 
----
+Issue #7 authentication/session reconnaissance is substantially documented. The document remains **Draft** because Issue #8 authorization mapping is still pending.
 
-## 11. Candidate Follow-Up Tests
+## 17. Authorization Model - Issue #8
 
-The following items should be carried into later testing rather than assumed to be vulnerabilities from reconnaissance alone:
+Issue #8 will continue within this same workpaper.
 
-- determine whether token revocation is expected by application design;
-- test whether password-change flows behave the same as password-reset flows for existing JWTs;
-- determine whether any refresh-token mechanism exists;
-- assess password policy separately;
-- validate account-enumeration behavior in recovery/login responses;
-- test authorization boundaries using multiple users and owned objects.
+Planned coverage:
 
----
-
-# Issue #8 — Authorization Model
-
-## 12. Objective
-
-Issue #8 will extend this same document with the application's authorization model rather than creating a separate file.
-
-Planned areas:
-
-- observable roles;
-- permissions per role;
-- object ownership relationships;
-- access to another user's objects;
-- privileged/admin-only functions;
+- observable user roles;
+- permissions available to each role;
+- authenticated versus privileged operations;
+- ownership relationships between users and application objects;
+- access-control boundaries between two standard users;
+- privileged/admin-only operations;
 - candidate BOLA, BOPLA and BFLA test cases.
 
-## 13. Role / Permission Matrix
+## 18. Role and Permission Matrix
 
 _To be completed during Issue #8._
 
-## 14. Object Ownership Model
+## 19. Object Ownership Model
 
 _To be completed during Issue #8._
 
-## 15. Candidate Authorization Test Cases
+## 20. Candidate Authorization Test Cases
 
 _To be completed during Issue #8._
