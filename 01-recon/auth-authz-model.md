@@ -1,4 +1,4 @@
-# crAPI Application Security Assessment - Authentication and Authorization Model
+# Authentication and Authorization Model
 
 ## Important Info
 > This document is part of a simulated white-box security assessment of OWASP crAPI for training and community reference. The client, contacts, scope details and engagement artifacts are fictitious.
