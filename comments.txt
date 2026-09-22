@@ -1,1 +1,34 @@
-Check user Y next and record the result for comparison with user X.
+This is a confirmed authorization finding.
+
+You sent the request using user X's valid Bearer token, but the vehicle ID in the URL belongs to user Y:
+
+GET /identity/api/v2/vehicle/34aa70cc-4760-4447-93bf-56e8037e6352/location
+
+The server returned HTTP 200 and disclosed user Y's protected vehicle/location information, including:
+- carId
+- latitude / longitude
+- fullName: Test User Y
+- email: test.userY@email.com
+
+What this means:
+Authentication is working — the server knows you are user X from the token. The problem is authorization: after receiving the vehicle identifier, the API is not verifying that this vehicle belongs to the authenticated user before returning the object.
+
+This is a strong Broken Object Level Authorization (BOLA) finding, commonly also described as an IDOR-style authorization issue. In OWASP API Security terms, this maps to API1: Broken Object Level Authorization.
+
+The important learning point is the difference:
+- Authentication question: "Who are you?" -> User X was authenticated correctly.
+- Authorization question: "Are you allowed to access this vehicle?" -> The API failed this check and returned user Y's object.
+
+Evidence is already strong because you changed only the target object while keeping X's authorization context and received Y's data with HTTP 200.
+
+Next, keep the test small and human-driven. Do not automate enumeration yet.
+
+Please perform these two checks:
+1. Send the same Y vehicle-location request without the Authorization header. Record whether you get 401/403 or data.
+2. Restore X's token and try one obviously invalid/random vehicle UUID. Record the status code and response.
+
+Why these two checks matter:
+- Removing the token confirms that authentication is still enforced.
+- An invalid UUID shows how the endpoint behaves for a nonexistent object and gives us a useful comparison against the unauthorized-but-valid Y vehicle.
+
+After those two responses, we can document the finding cleanly and decide whether any additional validation is necessary.
