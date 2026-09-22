@@ -15,8 +15,8 @@
 | Environment | UAT |
 | Related GitHub Issues | Issue #7 - Map authentication, sessions and token handling; Issue #8 - Identify roles and authorization boundaries |
 | Document Owner | Mr. Wario |
-| Version | 0.9.1 |
-| Status | Draft - Issue #7 documented / Issue #8 pending |
+| Version | 1.0 |
+| Status | Draft - Issue #7 documented / Issue #8 authorization validation in progress |
 | Date Created | 20 September 2026 |
 | Classification | Engagement Confidential / Training Simulation |
 | Repository Location | `01-recon/auth-authz-model.md` |
@@ -31,6 +31,7 @@
 | 0.8 | 20 September 2026 | Mr. Wario | Added JWT, token storage, logout, password recovery, OTP and token-revocation observations |
 | 0.9 | 20 September 2026 | Mr. Wario | Aligned document with the Phase 1 reconnaissance workpaper format and prepared shared authorization sections for Issue #8 |
 | 0.9.1 | 20 September 2026 | Mr. Wario | Added consolidated findings-to-date section for authentication/session observations requiring later validation or reporting |
+| 1.0 | 22 September 2026 | Mr. Wario | Added Issue #8 authorization testing results, confirmed cross-user vehicle-location BOLA behavior, control comparisons and error-handling observations |
 
 ## Table of Contents
 
@@ -80,7 +81,7 @@ The Issue #7 assessment covered:
 - OTP reuse and failed-attempt handling;
 - behavior of existing JWTs after password reset.
 
-Issue #8 authorization mapping will be added to the same document.
+Issue #8 authorization mapping is now in progress in this same document. Controlled cross-user testing is being performed with two standard user accounts to validate object-ownership boundaries.
 
 ## 3. Assessment Methodology
 
@@ -415,6 +416,9 @@ A password reset may be used when an account compromise is suspected. If a valid
 | New OTP resets attempt counter | Confirmed runtime behavior |
 | Pre-reset JWT survives password reset | Candidate security finding |
 | OTP errors use HTTP 500/503 | API/error-handling observation |
+| User X can request User Y's valid vehicle-location object and receive HTTP 200 | Confirmed authorization failure / BOLA |
+| Unauthenticated request to the tested vehicle-location endpoint returns HTTP 401 | Positive authentication control |
+| Authenticated request using a nonexistent vehicle/VIN reference returns HTTP 500 | Error-handling / robustness observation |
 
 ## 13. Findings Identified to Date
 
@@ -428,8 +432,26 @@ The following items have been identified from the Issue #7 reconnaissance and sh
 | JWT is stored in browser Local Storage | Developer Tools showed the access token in Local Storage while authenticated | Security-relevant client-side storage observation |
 | OTP attempt counter resets when a new OTP is issued | Approximately 10 failed attempts triggered the attempt limit; requesting a fresh OTP restarted the counter | Recovery-control observation requiring later risk assessment |
 | Invalid/reused OTP and attempt-limit conditions use HTTP 500/503 | Reused OTP returned HTTP 500 and exceeded attempts returned HTTP 503 | API/error-handling observation |
+| Broken Object Level Authorization on vehicle location | User X's valid Bearer token combined with User Y's valid vehicle identifier returned HTTP 200 and disclosed User Y's vehicle/location and identity data | Confirmed authorization finding |
+| Nonexistent vehicle/VIN reference causes HTTP 500 | An authenticated request using a nonexistent vehicle/VIN reference produced HTTP 500 Internal Server Error rather than a controlled not-found response | API/error-handling observation |
 
-### Highest-Priority Candidate Finding
+### Confirmed Authorization Finding
+
+**Broken Object Level Authorization (BOLA) on vehicle location.**
+
+During controlled cross-user testing, User X remained authenticated using User X's valid Bearer token while only the vehicle object reference was changed to a valid vehicle identifier belonging to User Y. The server returned HTTP 200 and disclosed User Y's protected object data, including vehicle/location information and associated identity data.
+
+This demonstrates that authentication is being enforced but object ownership is not being verified for the tested resource.
+
+Comparison results:
+
+- no Authorization token -> HTTP 401;
+- User X token + nonexistent vehicle/VIN reference -> HTTP 500 Internal Server Error;
+- User X token + User Y's valid vehicle identifier -> HTTP 200 with User Y's data.
+
+The HTTP 500 behavior for the nonexistent reference is recorded separately as an error-handling observation and is not the basis of the BOLA finding.
+
+### Highest-Priority Authentication Candidate Finding
 
 **Previously issued JWTs remain valid after password reset.**
 
@@ -499,6 +521,9 @@ Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result wa
 | Failed OTP attempt sequence | Burp Repeater | Attempt-limit behavior |
 | New OTP after attempt limit | Burp Repeater | Attempt-counter reset behavior |
 | Pre-reset JWT replay after password reset | Burp Repeater | Confirms a JWT issued before password reset remains valid after the reset and can continue to be accepted for up to its original ~7-day lifetime, until normal token expiry |
+| Cross-user vehicle-location request | Burp Repeater | User X token + User Y valid vehicle identifier returned HTTP 200 with User Y protected vehicle/location and identity data |
+| Vehicle-location request without Authorization | Burp Repeater | Returned HTTP 401, confirming the endpoint still requires authentication |
+| Vehicle-location request with nonexistent vehicle/VIN reference | Burp Repeater | Returned HTTP 500 Internal Server Error; recorded as separate error-handling observation |
 
 ## 16. Limitations
 
@@ -507,13 +532,14 @@ Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result wa
 - OTP testing was limited to controlled manual attempts in the local lab.
 - Refresh-token behavior was not observed during the tested workflows.
 - Password policy has not yet been fully assessed.
-- Authorization mapping is intentionally deferred to Issue #8 and will be added to this same document.
+- Issue #8 authorization mapping is in progress. One vehicle-location BOLA case is confirmed, but authorization coverage across other object types and related vehicle endpoints is not yet complete.
 
 ## 17. Follow-Up Actions
 
-- Continue Issue #8 in this document and build the role/permission matrix.
-- Identify ownership relationships between users, vehicles, orders, posts and other objects.
-- Validate candidate BOLA, BOPLA and BFLA cases during authorization testing.
+- Continue Issue #8 and complete controlled authorization coverage across one or two closely related vehicle endpoints.
+- Expand the ownership model from vehicles to orders, posts and other user-owned objects where applicable.
+- Determine whether the confirmed BOLA behavior is isolated to the vehicle-location endpoint or reflects a broader authorization pattern.
+- Validate candidate BOPLA and BFLA cases during later authorization testing.
 - Assess password policy and account-enumeration behavior.
 - Determine whether any refresh-token mechanism exists.
 - Compare normal password-change behavior with password-reset behavior for existing JWTs.
@@ -541,30 +567,128 @@ Purpose: subtract `iat` from `exp` using Bash arithmetic. The observed result wa
 | Password reset revokes old JWTs | No; pre-reset JWT remained valid |
 | Error handling | Invalid OTP / attempt limit use HTTP 500/503 |
 
-Issue #7 authentication/session reconnaissance is substantially documented. The document remains **Draft** because Issue #8 authorization mapping is still pending.
+Issue #7 authentication/session reconnaissance is substantially documented. Issue #8 authorization mapping is now underway and has already produced one confirmed BOLA finding. The document remains **Draft** until the remaining authorization coverage is completed.
 
 ## 19. Authorization Model - Issue #8
 
-Issue #8 will continue within this same workpaper.
+Issue #8 is being performed with two controlled standard-user accounts (User X and User Y) to understand horizontal authorization boundaries.
 
-Planned coverage:
+### 19.1 Current Authorization Model
 
-- observable user roles;
-- permissions available to each role;
-- authenticated versus privileged operations;
-- ownership relationships between users and application objects;
-- access-control boundaries between two standard users;
-- privileged/admin-only operations;
-- candidate BOLA, BOPLA and BFLA test cases.
+Observed behavior indicates that the application distinguishes authentication from object-level authorization:
+
+- a Bearer JWT is required for the tested vehicle-location endpoint;
+- requests without a valid token are rejected;
+- a standard authenticated user can access their normal vehicle resources;
+- for the tested vehicle-location resource, the backend did not enforce ownership when supplied with another standard user's valid vehicle identifier.
+
+The tested endpoint was:
+
+```http
+GET /identity/api/v2/vehicle/{vehicleId}/location
+```
+
+### 19.2 Confirmed Cross-User Authorization Failure
+
+Controlled test:
+
+1. authenticate as User X;
+2. retain User X's valid Bearer token;
+3. replace only the vehicle identifier with User Y's known valid vehicle identifier;
+4. send the request.
+
+Observed result:
+
+```text
+HTTP 200
+```
+
+The response disclosed User Y's protected vehicle/location object and associated identity information.
+
+**Conclusion:** the server authenticated User X correctly but failed to verify that User X was authorized to access User Y's vehicle object.
+
+Classification:
+
+- OWASP API Security Top 10: API1 - Broken Object Level Authorization;
+- commonly described as an IDOR-style object-reference authorization weakness.
+
+### 19.3 Control Comparisons
+
+| Test | Observed Result | Interpretation |
+|---|---|---|
+| No Authorization token | HTTP 401 | Authentication is enforced |
+| User X token + User Y valid vehicle identifier | HTTP 200 + User Y data | Object-level authorization failure |
+| User X token + nonexistent vehicle/VIN reference | HTTP 500 | Separate error-handling / robustness issue |
+
+The nonexistent-reference HTTP 500 is not the BOLA evidence. The BOLA is established by the authenticated cross-user request returning another user's valid protected object.
+
+### 19.4 Security Impact
+
+A logged-in user who obtains another valid vehicle identifier can access information belonging to another user through the tested location endpoint. The observed response included precise location information and associated identity data.
+
+The identifier itself is not an authorization control. Even when identifiers are difficult to guess, the backend must verify ownership or permission before returning the referenced object.
+
+### 19.5 Expected Secure Behavior
+
+After authenticating the caller, the backend should verify that the requested vehicle belongs to that caller or that the caller has an explicitly authorized relationship with the vehicle.
+
+A request for another user's object should be rejected with an appropriate authorization response, commonly HTTP 403, or a deliberately chosen HTTP 404 where object existence is intentionally hidden.
 
 ## 20. Role and Permission Matrix
 
-_To be completed during Issue #8._
+| Actor / Role | Observed Access | Current Assessment |
+|---|---|---|
+| Unauthenticated user | Tested vehicle-location request rejected with HTTP 401 | Authentication boundary enforced |
+| Standard authenticated user - own objects | Normal authenticated application access available | Expected baseline |
+| Standard authenticated User X - User Y vehicle-location object | HTTP 200 with User Y protected data | Authorization boundary failed for tested object |
+| Privileged/admin role | Not yet mapped | Pending |
+
+No separate privileged/admin account behavior has yet been validated during Issue #8.
 
 ## 21. Object Ownership Model
 
-_To be completed during Issue #8._
+Current confirmed ownership relationship:
+
+```text
+User
+  -> Vehicle
+      -> Vehicle Location
+```
+
+The vehicle identifier is supplied in the API path. The tested backend behavior shows that possession of a valid identifier is sufficient to retrieve the corresponding location object even when the authenticated caller is a different standard user.
+
+Expected ownership rule:
+
+```text
+authenticated_user == vehicle.owner
+```
+
+or an equivalent server-side authorization policy.
+
+Current observed rule for the tested endpoint appears effectively closer to:
+
+```text
+authenticated_user exists
+AND requested_vehicle exists
+```
+
+without a confirmed ownership check between the two.
+
+Additional ownership relationships still to be mapped include orders, posts/comments and any other user-specific resources exposed by the application.
 
 ## 22. Candidate Authorization Test Cases
 
-_To be completed during Issue #8._
+| Test Case | Purpose | Status |
+|---|---|---|
+| User X accesses User X vehicle location | Establish legitimate baseline | Completed during normal use |
+| User X accesses User Y vehicle location | Test horizontal object-level authorization | **Confirmed vulnerable - HTTP 200** |
+| Same vehicle-location request without token | Confirm authentication requirement | Completed - HTTP 401 |
+| User X requests nonexistent vehicle/VIN reference | Compare nonexistent-object handling | Completed - HTTP 500; separate error-handling observation |
+| Cross-user test against 1-2 related vehicle endpoints | Determine whether BOLA is isolated or systemic | Pending |
+| Cross-user read tests for other owned objects | Expand object-ownership coverage | Pending |
+| Safe authorization checks on state-changing object actions | Determine whether unauthorized modification is possible without destructive testing | Pending |
+| Privileged/admin-only function checks | Assess function-level authorization boundaries | Pending |
+
+### Issue #8 Current Status
+
+The core vehicle-location authorization flaw is confirmed. Remaining work is focused on controlled coverage and documentation rather than broad enumeration. The next step is to inspect one or two related vehicle endpoints using the same two-user comparison method and determine whether the weakness is isolated or systemic.
