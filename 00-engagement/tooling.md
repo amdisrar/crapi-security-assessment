@@ -4,7 +4,6 @@
 
 > This document is part of a simulated white-box security assessment of OWASP crAPI for training and community reference. The client, contacts, scope details and engagement artifacts are fictitious.
 >
-> All security testing is performed only against the user's own controlled local lab environment using OWASP crAPI and other intentionally vulnerable training components. No production systems, third-party systems, public targets or unauthorized assets are involved. The project is strictly for study, education and hands-on learning.
 
 ## Document Control
 
