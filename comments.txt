@@ -47,3 +47,55 @@ At this point the core vulnerability is confirmed. Do not enumerate many vehicle
 
 Next step for Phase #8:
 We should now inspect one or two closely related vehicle endpoints to determine whether this authorization weakness is isolated to /location or is part of a broader object-authorization pattern. Keep the same human-driven method: one controlled cross-user test at a time, compare expected vs actual behavior, and record the evidence.
+
+---
+
+Additional Phase #8 finding — Cross-user mechanic report access
+
+You tested:
+
+GET /workshop/api/mechanic/mechanic_report?report_id=8
+
+while authenticated as user Y. The JWT payload confirms the subject is:
+
+test.userY@email.com
+
+The API still returned HTTP 200 and disclosed report 8, which belongs to user X. The response includes:
+- report ID: 8
+- mechanic identity
+- vehicle internal ID
+- VIN
+- owner email: test.userX@email.com
+- owner phone number
+- problem details
+- report status and timestamps
+
+This is another confirmed Broken Object Level Authorization (BOLA) / IDOR-style finding.
+
+Why this matters:
+The application authenticates user Y successfully, but the backend appears to trust the user-controlled report_id parameter without verifying that report 8 belongs to Y or that Y is otherwise authorized to read it.
+
+Expected secure behavior:
+The server should authorize access to the specific mechanic report after authentication. If report 8 belongs to user X and Y has no legitimate relationship to it, the API should reject the request, typically with 403 or an intentionally non-revealing 404.
+
+Actual behavior:
+Y token + X's valid report_id=8 -> HTTP 200 + X's report data.
+
+This also tells us something important about the scope of Phase #8: the authorization weakness is not limited to the vehicle-location endpoint. We now have cross-user object access in at least two different API areas:
+1. /identity/api/v2/vehicle/{vehicleId}/location
+2. /workshop/api/mechanic/mechanic_report?report_id={id}
+
+The identifier style is different:
+- vehicle location uses a UUID-like vehicle identifier
+- mechanic report uses a simple numeric report_id
+
+But the underlying security failure is the same: the server retrieves the object based on a client-supplied identifier without enforcing object-level ownership/authorization.
+
+The numeric report_id makes this especially important from a design perspective because sequential identifiers are often easier to discover than UUIDs. The issue is still authorization failure—not the fact that the ID is numeric.
+
+For now, do not enumerate a range of report IDs. One controlled cross-user proof is enough to confirm the flaw.
+
+Next useful validation:
+1. Request report_id=8 without a token and record the status.
+2. With Y's token, request one obviously nonexistent report ID and record the status.
+3. If both behave as expected, we can document this as a second clean BOLA finding and then continue checking only a small number of distinct object types in Phase #8 rather than repeatedly testing the same pattern.
