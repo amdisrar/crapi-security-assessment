@@ -1,0 +1,155 @@
+services/workshop/crapi/mechanic/views.py:396:        full_path = os.path.abspath(os.path.join(settings.BASE_DIR, "reports",  filename_from_user))
+services/workshop/crapi/mechanic/urls.py:24:    re_path(r"signup$", mechanic_views.SignUpView.as_view()),
+services/workshop/crapi/mechanic/urls.py:25:    re_path(r"receive_report$", mechanic_views.ReceiveReportView.as_view()),
+services/workshop/crapi/mechanic/urls.py:26:    re_path(
+services/workshop/crapi/mechanic/urls.py:31:    re_path(
+services/workshop/crapi/mechanic/urls.py:35:    re_path(
+services/workshop/crapi/mechanic/urls.py:39:    re_path(r"service_requests$", mechanic_views.MechanicServiceRequestsView.as_view()),
+services/workshop/crapi/mechanic/urls.py:40:    re_path(
+services/workshop/crapi/mechanic/urls.py:44:    re_path(r"download_report$", mechanic_views.DownloadReportView.as_view()),
+services/workshop/crapi/mechanic/urls.py:45:    re_path(r"$", mechanic_views.MechanicView.as_view()),
+services/workshop/crapi/urls.py:22:    path("api/mechanic/", include("crapi.mechanic.urls")),
+services/workshop/crapi/urls.py:23:    path("api/merchant/", include("crapi.merchant.urls")),
+services/workshop/crapi/urls.py:24:    path("api/shop/", include("crapi.shop.urls")),
+services/workshop/crapi/urls.py:25:    path("api/management/", include("crapi.user.urls")),
+services/workshop/crapi/merchant/urls.py:24:    re_path(r"contact_mechanic$", merchant_views.ContactMechanicView.as_view()),
+services/workshop/crapi/merchant/urls.py:25:    re_path(
+services/workshop/crapi/user/urls.py:25:    re_path(r"users/all$", user_views.AdminUserView.as_view()),
+services/workshop/crapi/shop/urls.py:25:    re_path(r"products$", shop_views.ProductView.as_view()),
+services/workshop/crapi/shop/urls.py:26:    re_path(r"orders/all$", shop_views.OrderDetailsView.as_view()),
+services/workshop/crapi/shop/urls.py:27:    re_path(r"orders/return_order$", shop_views.ReturnOrder.as_view()),
+services/workshop/crapi/shop/urls.py:28:    re_path(r"orders/(?P<order_id>\d+)$", shop_views.OrderControlView.as_view()),
+services/workshop/crapi/shop/urls.py:29:    re_path(r"orders$", shop_views.OrderControlView.as_view()),
+services/workshop/crapi/shop/urls.py:30:    re_path(r"apply_coupon$", shop_views.ApplyCouponView.as_view()),
+services/workshop/crapi/shop/urls.py:31:    re_path(
+services/workshop/crapi_site/settings.py:47:BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+services/workshop/crapi_site/urls.py:22:    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+services/workshop/crapi_site/urls.py:25:    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+services/workshop/crapi_site/urls.py:28:    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+services/workshop/crapi_site/urls.py:35:    path("workshop/admin/", admin.site.urls),
+services/workshop/crapi_site/urls.py:36:    path("workshop/health_check/", include("health_check.urls")),
+services/workshop/crapi_site/urls.py:37:    path("workshop/", include("crapi.urls")),
+services/chatbot/src/chatbot/app.py:13:@root_bp.route("/", methods=["GET"])
+services/chatbot/src/chatbot/chat_api.py:20:@chat_bp.route("/init", methods=["POST"])
+services/chatbot/src/chatbot/chat_api.py:42:@chat_bp.route("/model", methods=["POST"])
+services/chatbot/src/chatbot/chat_api.py:54:@chat_bp.route("/ask", methods=["POST"])
+services/chatbot/src/chatbot/chat_api.py:73:@chat_bp.route("/state", methods=["GET"])
+services/chatbot/src/chatbot/chat_api.py:101:@chat_bp.route("/history", methods=["GET"])
+services/chatbot/src/chatbot/chat_api.py:117:@chat_bp.route("/reset", methods=["POST"])
+services/chatbot/src/chatbot/chat_api.py:125:@chat_bp.route("/health", methods=["GET"])
+services/identity/src/main/java/com/crapi/controller/ManagementControlller.java:48:  @PostMapping("/admin/lockUser")
+services/identity/src/main/java/com/crapi/controller/ManagementControlller.java:56:  @PostMapping("/user/apikey")
+services/identity/src/main/java/com/crapi/controller/ChangeEmailController.java:41:  @PostMapping("/v2/user/change-email")
+services/identity/src/main/java/com/crapi/controller/ChangeEmailController.java:59:  @PostMapping("/v2/user/verify-email-token")
+services/identity/src/main/java/com/crapi/controller/ProfileController.java:42:  @GetMapping("/api/v2/user/videos/{video_id}")
+services/identity/src/main/java/com/crapi/controller/ProfileController.java:60:  @PostMapping(value = "/api/v2/user/pictures")
+services/identity/src/main/java/com/crapi/controller/ProfileController.java:78:  @PostMapping(value = "/api/v2/user/videos")
+services/identity/src/main/java/com/crapi/controller/ProfileController.java:95:  @PutMapping("/api/v2/user/videos/{video_id}")
+services/identity/src/main/java/com/crapi/controller/ProfileController.java:113:  @DeleteMapping("/api/v2/user/videos/{video_id}")
+services/identity/src/main/java/com/crapi/controller/ProfileController.java:129:  @DeleteMapping("/api/v2/admin/videos/{video_id}")
+services/identity/src/main/java/com/crapi/controller/ProfileController.java:145:  @GetMapping("api/v2/user/videos/convert_video")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:55:  @PostMapping("/login")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:71:  @PostMapping("/signup")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:88:  @PostMapping("/verify")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:101:  @GetMapping("/jwks.json")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:111:  @PostMapping("/forget-password")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:126:  @PostMapping("/v2/check-otp")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:141:  @PostMapping("/v3/check-otp")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:157:  @PostMapping("/v4.0/user/login-with-token")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:169:  @PostMapping("/v2.7/user/login-with-token")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:180:  @PostMapping("/reset-test-users")
+services/identity/src/main/java/com/crapi/controller/AuthController.java:199:  @PostMapping("/unlock")
+services/identity/src/main/java/com/crapi/controller/UserController.java:43:  @GetMapping("/dashboard")
+services/identity/src/main/java/com/crapi/controller/UserController.java:58:  @PostMapping("/reset-password")
+services/identity/src/main/java/com/crapi/controller/HealthCheckController.java:28:  @GetMapping("/identity/health_check")
+services/identity/src/main/java/com/crapi/controller/VehicleController.java:47:  @PostMapping("/vehicle/add_vehicle")
+services/identity/src/main/java/com/crapi/controller/VehicleController.java:61:  @PostMapping("/vehicle/resend_email")
+services/identity/src/main/java/com/crapi/controller/VehicleController.java:75:  @GetMapping("/vehicle/vehicles")
+services/identity/src/main/java/com/crapi/controller/VehicleController.java:95:   *     api @GetMapping("/vehicle/vehicles") public ResponseEntity<?>
+services/identity/src/main/java/com/crapi/controller/VehicleController.java:108:  @GetMapping("/vehicle/{carId}/location")
+services/identity/src/main/java/com/crapi/controller/ChangePhoneController.java:26:  @PostMapping("/v2/user/change-phone-number")
+services/identity/src/main/java/com/crapi/controller/ChangePhoneController.java:44:  @PostMapping("v2/user/verify-phone-otp")
+services/community/api/router/routes.go:47:	server.Router.HandleFunc("/community/api/v2/community/posts/recent", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(controller.GetPost, server.DB))).Methods("GET", "OPTIONS")
+services/community/api/router/routes.go:49:	server.Router.HandleFunc("/community/api/v2/community/posts/{postID}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(controller.GetPostByID, server.DB))).Methods("GET", "OPTIONS")
+services/community/api/router/routes.go:51:	server.Router.HandleFunc("/community/api/v2/community/posts", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(controller.AddNewPost, server.DB))).Methods("POST", "OPTIONS")
+services/community/api/router/routes.go:53:	server.Router.HandleFunc("/community/api/v2/community/posts/{postID}/comment", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(controller.Comment, server.DB))).Methods("POST", "OPTIONS")
+services/community/api/router/routes.go:56:	server.Router.HandleFunc("/community/api/v2/coupon/new-coupon", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(controller.AddNewCoupon, server.DB))).Methods("POST", "OPTIONS")
+services/community/api/router/routes.go:58:	server.Router.HandleFunc("/community/api/v2/coupon/validate-coupon", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(controller.ValidateCoupon, server.DB))).Methods("POST", "OPTIONS")
+services/community/api/router/routes.go:61:	server.Router.HandleFunc("/community/home", middlewares.SetMiddlewareJSON(controller.Home)).Methods("GET")
+services/community/api/server.go:83:	var route = router.Server{}
+services/community/vendor/github.com/gorilla/mux/mux.go:46:// This will send all incoming requests to the router.
+services/community/vendor/github.com/gorilla/mux/mux.go:296:// HandleFunc registers a new route with a matcher for the URL path.
+services/community/vendor/github.com/gorilla/mux/mux.go:298:func (r *Router) HandleFunc(path string, f func(http.ResponseWriter,
+services/community/vendor/github.com/gorilla/mux/mux.go:322:// See Route.Methods().
+services/community/vendor/github.com/gorilla/mux/mux.go:323:func (r *Router) Methods(methods ...string) *Route {
+services/community/vendor/github.com/gorilla/mux/mux.go:324:	return r.NewRoute().Methods(methods...)
+services/community/vendor/github.com/gorilla/mux/route.go:325:func (r *Route) Methods(methods ...string) *Route {
+services/community/vendor/github.com/gorilla/mux/route.go:478://     s.HandleFunc("/products/", ProductsHandler)
+services/community/vendor/github.com/gorilla/mux/route.go:479://     s.HandleFunc("/products/{key}", ProductHandler)
+services/community/vendor/github.com/gorilla/mux/route.go:480://     s.HandleFunc("/articles/{category}/{id:[0-9]+}"), ArticleHandler)
+services/community/vendor/github.com/gorilla/mux/route.go:501://     r.HandleFunc("/articles/{category}/{id:[0-9]+}", ArticleHandler).
+services/community/vendor/github.com/gorilla/mux/route.go:515://     r.HandleFunc("/articles/{category}/{id:[0-9]+}", ArticleHandler).
+services/community/vendor/github.com/gorilla/mux/route.go:694:func (r *Route) GetMethods() ([]string, error) {
+services/community/vendor/github.com/gorilla/mux/doc.go:30:		r.HandleFunc("/", HomeHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:31:		r.HandleFunc("/products", ProductsHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:32:		r.HandleFunc("/articles", ArticlesHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:37:equivalent to how http.HandleFunc() works: if an incoming request URL matches
+services/community/vendor/github.com/gorilla/mux/doc.go:46:	r.HandleFunc("/products/{key}", ProductHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:47:	r.HandleFunc("/articles/{category}/", ArticlesCategoryHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:48:	r.HandleFunc("/articles/{category}/{id:[0-9]+}", ArticleHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:52:	r.HandleFunc("/articles/{category}/{sort:(?:asc|desc|new)}", ArticlesCategoryHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:83:	r.Methods("GET", "POST")
+services/community/vendor/github.com/gorilla/mux/doc.go:105:	r.HandleFunc("/products", ProductsHandler).
+services/community/vendor/github.com/gorilla/mux/doc.go:107:	  Methods("GET").
+services/community/vendor/github.com/gorilla/mux/doc.go:123:	s.HandleFunc("/products/", ProductsHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:124:	s.HandleFunc("/products/{key}", ProductHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:125:	s.HandleFunc("/articles/{category}/{id:[0-9]+}"), ArticleHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:134:paths relatively to a given subrouter.
+services/community/vendor/github.com/gorilla/mux/doc.go:142:	s.HandleFunc("/", ProductsHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:144:	s.HandleFunc("/{key}/", ProductHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:146:	s.HandleFunc("/{key}/details", ProductDetailsHandler)
+services/community/vendor/github.com/gorilla/mux/doc.go:179:	r.HandleFunc("/articles/{category}/{id:[0-9]+}", ArticleHandler).
+services/community/vendor/github.com/gorilla/mux/doc.go:262:	r.HandleFunc("/", handler)
+services/community/vendor/github.com/gorilla/mux/doc.go:296:	r.HandleFunc("/", handler)
+services/community/vendor/github.com/gorilla/mux/middleware.go:64:			methods, err := route.GetMethods()
+services/community/vendor/github.com/gorilla/mux/README.md:54:    r.HandleFunc("/", HomeHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:55:    r.HandleFunc("/products", ProductsHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:56:    r.HandleFunc("/articles", ArticlesHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:61:Here we register three routes mapping URL paths to handlers. This is equivalent to how `http.HandleFunc()` works: if an incoming request URL matches one of the paths, the corresponding handler is called passing (`http.ResponseWriter`, `*http.Request`) as parameters.
+services/community/vendor/github.com/gorilla/mux/README.md:67:r.HandleFunc("/products/{key}", ProductHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:68:r.HandleFunc("/articles/{category}/", ArticlesCategoryHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:69:r.HandleFunc("/articles/{category}/{id:[0-9]+}", ArticleHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:105:r.Methods("GET", "POST")
+services/community/vendor/github.com/gorilla/mux/README.md:137:r.HandleFunc("/products", ProductsHandler).
+services/community/vendor/github.com/gorilla/mux/README.md:139:  Methods("GET").
+services/community/vendor/github.com/gorilla/mux/README.md:143:Routes are tested in the order they were added to the router. If two routes match, the first one wins:
+services/community/vendor/github.com/gorilla/mux/README.md:147:r.HandleFunc("/specific", specificHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:163:s.HandleFunc("/products/", ProductsHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:164:s.HandleFunc("/products/{key}", ProductHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:165:s.HandleFunc("/articles/{category}/{id:[0-9]+}", ArticleHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:170:Subrouters can be used to create domain or path "namespaces": you define subrouters in a central place and then parts of the app can register its paths relatively to a given subrouter.
+services/community/vendor/github.com/gorilla/mux/README.md:178:s.HandleFunc("/", ProductsHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:180:s.HandleFunc("/{key}/", ProductHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:182:s.HandleFunc("/{key}/details", ProductDetailsHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:282:	router.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
+services/community/vendor/github.com/gorilla/mux/README.md:288:	router.PathPrefix("/").Handler(spa)
+services/community/vendor/github.com/gorilla/mux/README.md:310:r.HandleFunc("/articles/{category}/{id:[0-9]+}", ArticleHandler).
+services/community/vendor/github.com/gorilla/mux/README.md:380:The `Walk` function on `mux.Router` can be used to visit all of the routes that are registered on a router. For example,
+services/community/vendor/github.com/gorilla/mux/README.md:400:	r.HandleFunc("/", handler)
+services/community/vendor/github.com/gorilla/mux/README.md:401:	r.HandleFunc("/products", handler).Methods("POST")
+services/community/vendor/github.com/gorilla/mux/README.md:402:	r.HandleFunc("/articles", handler).Methods("GET")
+services/community/vendor/github.com/gorilla/mux/README.md:403:	r.HandleFunc("/articles/{id}", handler).Methods("GET", "PUT")
+services/community/vendor/github.com/gorilla/mux/README.md:404:	r.HandleFunc("/authors", handler).Queries("surname", "{surname}")
+services/community/vendor/github.com/gorilla/mux/README.md:422:		methods, err := route.GetMethods()
+services/community/vendor/github.com/gorilla/mux/README.md:533:r.HandleFunc("/", handler)
+services/community/vendor/github.com/gorilla/mux/README.md:573:r.HandleFunc("/", handler)
+services/community/vendor/github.com/gorilla/mux/README.md:588:* The middleware will set the `Access-Control-Allow-Methods` header to all the method matchers (e.g. `r.Methods(http.MethodGet, http.MethodPut, http.MethodOptions)` -> `Access-Control-Allow-Methods: GET,PUT,OPTIONS`) on a route
+services/community/vendor/github.com/gorilla/mux/README.md:606:    r.HandleFunc("/foo", fooHandler).Methods(http.MethodGet, http.MethodPut, http.MethodPatch, http.MethodOptions)
+services/community/vendor/github.com/gorilla/mux/README.md:672:    r.HandleFunc("/health", HealthCheckHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:730:    r.HandleFunc("/metrics/{type}", MetricsHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:763:        router.HandleFunc("/metrics/{type}", MetricsHandler)
+services/community/vendor/github.com/gorilla/mux/README.md:764:        router.ServeHTTP(rr, req)
+services/community/vendor/github.com/gorilla/mux/README.md:796:    r.HandleFunc("/", YourHandler)
+services/gateway-service/main.go:171:	http.HandleFunc("/", HelloServer)
+services/gateway-service/main.go:172:	http.HandleFunc("/v1/vin/ownership", GetOwners)
+services/gateway-service/main.go:173:	http.HandleFunc("/v1/payment", GetPayMentInfo)

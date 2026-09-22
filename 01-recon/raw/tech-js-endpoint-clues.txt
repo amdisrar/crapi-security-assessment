@@ -1,0 +1,4 @@
+/community/posts
+/community/posts/<postId>
+/community/posts/<postId>/comment
+/community/posts/recent

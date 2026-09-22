@@ -1,0 +1,66 @@
+services/chatbot/.env:16:export OPENAPI_SPEC=src/resources/crapi-openapi-spec.json
+services/chatbot/src/resources/crapi-openapi-spec.json:2:  "openapi" : "3.0.1",
+services/chatbot/src/mcpserver/config.py:12:    OPENAPI_SPEC = os.getenv("OPENAPI_SPEC", "/app/resources/crapi-openapi-spec.json")
+services/chatbot/src/mcpserver/server.py:76:# Load your OpenAPI spec
+services/chatbot/src/mcpserver/server.py:77:with open(Config.OPENAPI_SPEC, "r") as f:
+services/chatbot/src/mcpserver/server.py:78:    openapi_spec = json.load(f)
+services/chatbot/src/mcpserver/server.py:81:mcp = FastMCP.from_openapi(
+services/chatbot/src/mcpserver/server.py:82:    openapi_spec=openapi_spec, client=get_http_client(), name="My crAPI MCP Server"
+services/chatbot/Dockerfile:21:COPY src/resources/crapi-openapi-spec.json /app/resources/crapi-openapi-spec.json
+services/web/src/components/bot/Bot.tsx:51:  openapiKey: string | null;
+services/web/src/components/bot/Bot.tsx:73:    openapiKey: localStorage.getItem("openapi_key"),
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/change_stream.go:324:		elem, cs.err = transformBsoncoreDocument(cs.registry, val.Index(i).Interface())
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/change_stream.go:348:		raDoc, cs.err = transformBsoncoreDocument(cs.registry, cs.options.ResumeAfter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/change_stream.go:358:		saDoc, cs.err = transformBsoncoreDocument(cs.registry, cs.options.StartAfter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/database.go:155:	runCmdDoc, err := transformBsoncoreDocument(db.registry, cmd)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/database.go:294:	filterDoc, err := transformBsoncoreDocument(db.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/bulk_write.go:245:	f, err := transformBsoncoreDocument(registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/bulk_write.go:319:	f, err := transformBsoncoreDocument(registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:402:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:614:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:642:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:670:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:675:	r, err := transformBsoncoreDocument(coll.registry, replacement)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1007:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1096:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1174:		max, err := transformBsoncoreDocument(coll.registry, fo.Max)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1188:		min, err := transformBsoncoreDocument(coll.registry, fo.Min)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1202:		proj, err := transformBsoncoreDocument(coll.registry, fo.Projection)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1222:		sort, err := transformBsoncoreDocument(coll.registry, fo.Sort)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1362:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1375:		proj, err := transformBsoncoreDocument(coll.registry, fod.Projection)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1382:		sort, err := transformBsoncoreDocument(coll.registry, fod.Sort)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1409:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1413:	r, err := transformBsoncoreDocument(coll.registry, replacement)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1433:		proj, err := transformBsoncoreDocument(coll.registry, fo.Projection)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1443:		sort, err := transformBsoncoreDocument(coll.registry, fo.Sort)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1478:	f, err := transformBsoncoreDocument(coll.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1509:		proj, err := transformBsoncoreDocument(coll.registry, fo.Projection)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/collection.go:1519:		sort, err := transformBsoncoreDocument(coll.registry, fo.Sort)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/client_encryption.go:67:		keyDoc, err := transformBsoncoreDocument(ce.keyVaultClient.registry, dko.MasterKey)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/mongo.go:191:	b, err := transformBsoncoreDocument(registry, val)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/mongo.go:198:func transformBsoncoreDocument(registry *bsoncodec.Registry, val interface{}) (bsoncore.Document, error) {
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/mongo.go:319:			doc, err := transformBsoncoreDocument(registry, val.Index(idx).Interface())
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/mongo.go:344:		u.Data, err = transformBsoncoreDocument(registry, update)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/mongo.go:401:			u.Data, err = transformBsoncoreDocument(registry, update)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/mongo.go:416:			doc, err := transformBsoncoreDocument(registry, val.Index(idx).Interface())
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/mongo.go:437:		doc, err := transformBsoncoreDocument(registry, val)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/mongo.go:448:	filterDoc, err := transformBsoncoreDocument(registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/client.go:620:		schema, err := transformBsoncoreDocument(c.registry, v)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/client.go:691:	filterDoc, err := transformBsoncoreDocument(c.registry, filter)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/index_view.go:174:		keys, err := transformBsoncoreDocument(iv.coll.registry, model.Keys)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/index_view.go:265:		doc, err := transformBsoncoreDocument(iv.coll.registry, opts.StorageEngine)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/index_view.go:288:		doc, err := transformBsoncoreDocument(iv.coll.registry, opts.Weights)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/index_view.go:311:		doc, err := transformBsoncoreDocument(iv.coll.registry, opts.PartialFilterExpression)
+services/community/vendor/go.mongodb.org/mongo-driver/mongo/index_view.go:322:		doc, err := transformBsoncoreDocument(iv.coll.registry, opts.WildcardProjection)
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_decoders.go:61:		RegisterTypeDecoder(tCoreDocument, ValueDecoderFunc(dvd.CoreDocumentDecodeValue)).
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_decoders.go:1117:// CoreDocumentDecodeValue is the ValueDecoderFunc for bsoncore.Document.
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_decoders.go:1118:func (DefaultValueDecoders) CoreDocumentDecodeValue(dc DecodeContext, vr bsonrw.ValueReader, val reflect.Value) error {
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_decoders.go:1119:	if !val.CanSet() || val.Type() != tCoreDocument {
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_decoders.go:1120:		return ValueDecoderError{Name: "CoreDocumentDecodeValue", Types: []reflect.Type{tCoreDocument}, Received: val}
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_encoders.go:88:		RegisterTypeEncoder(tCoreDocument, ValueEncoderFunc(dve.CoreDocumentEncodeValue)).
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_encoders.go:716:// CoreDocumentEncodeValue is the ValueEncoderFunc for bsoncore.Document.
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_encoders.go:717:func (DefaultValueEncoders) CoreDocumentEncodeValue(ec EncodeContext, vw bsonrw.ValueWriter, val reflect.Value) error {
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_encoders.go:718:	if !val.IsValid() || val.Type() != tCoreDocument {
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/default_value_encoders.go:719:		return ValueEncoderError{Name: "CoreDocumentEncodeValue", Types: []reflect.Type{tCoreDocument}, Received: val}
+services/community/vendor/go.mongodb.org/mongo-driver/bson/bsoncodec/types.go:81:var tCoreDocument = reflect.TypeOf(bsoncore.Document{})

@@ -1,0 +1,14 @@
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:32:import org.springframework.security.web.SecurityFilterChain;
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:77:  public SecurityFilterChain securityFilterChainWeb(HttpSecurity http) throws Exception {
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:78:    http.authorizeHttpRequests(
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:81:                    .requestMatchers("/identity/api/auth/**")
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:82:                    .permitAll()
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:83:                    .requestMatchers("/identity/health_check")
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:84:                    .permitAll()
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:85:                    .requestMatchers("/identity/api/v2/user/dashboard")
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:86:                    .permitAll()
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:87:                    .requestMatchers("/identity/management/user/**")
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:88:                    .permitAll()
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:89:                    .requestMatchers("/identity/management/admin/**")
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:90:                    .hasRole("ADMIN")
+services/identity/src/main/java/com/crapi/config/WebSecurityConfig.java:92:                    .authenticated())

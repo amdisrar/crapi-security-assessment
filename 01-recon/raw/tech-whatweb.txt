@@ -1,0 +1,1 @@
+[1m[34mhttp://127.0.0.1:8888[0m [200 OK] [1mCountry[0m[[0m[22mRESERVED[0m][[1m[31mZZ[0m], [1mHTML5[0m, [1mHTTPServer[0m[[1m[36mopenresty/1.27.1.2[0m], [1mIP[0m[[0m[22m127.0.0.1[0m], [1mOpenResty[0m[[1m[32m1.27.1.2[0m], [1mScript[0m, [1mTitle[0m[[1m[33mcrAPI[0m]
