@@ -1,34 +1,49 @@
-This is a confirmed authorization finding.
+Phase #8 — Authorization validation result
 
-You sent the request using user X's valid Bearer token, but the vehicle ID in the URL belongs to user Y:
+The additional checks confirm the behavior very clearly.
 
-GET /identity/api/v2/vehicle/34aa70cc-4760-4447-93bf-56e8037e6352/location
+1. Request without Authorization token
+Result: HTTP 401
+Response: CRAPIResponse(message=Invalid Token, status=401)
 
-The server returned HTTP 200 and disclosed user Y's protected vehicle/location information, including:
-- carId
-- latitude / longitude
-- fullName: Test User Y
-- email: test.userY@email.com
+This confirms that authentication is enforced. An unauthenticated user cannot access the endpoint.
 
-What this means:
-Authentication is working — the server knows you are user X from the token. The problem is authorization: after receiving the vehicle identifier, the API is not verifying that this vehicle belongs to the authenticated user before returning the object.
+2. Request with user X token + random/nonexistent vehicle ID
+Result: HTTP 404
+Response:
+{"message":"Sorry we didn't get vehicle for user: ","status":0}
 
-This is a strong Broken Object Level Authorization (BOLA) finding, commonly also described as an IDOR-style authorization issue. In OWASP API Security terms, this maps to API1: Broken Object Level Authorization.
+This confirms that the API distinguishes between:
+- an unauthenticated request -> 401
+- an authenticated request for a nonexistent vehicle -> 404
+- an authenticated request from user X for user Y's valid vehicle -> 200 with Y's data
 
-The important learning point is the difference:
-- Authentication question: "Who are you?" -> User X was authenticated correctly.
-- Authorization question: "Are you allowed to access this vehicle?" -> The API failed this check and returned user Y's object.
+That comparison makes the authorization flaw much stronger.
 
-Evidence is already strong because you changed only the target object while keeping X's authorization context and received Y's data with HTTP 200.
+Confirmed finding:
+Broken Object Level Authorization (BOLA) / IDOR-style authorization weakness on:
+GET /identity/api/v2/vehicle/{vehicleId}/location
 
-Next, keep the test small and human-driven. Do not automate enumeration yet.
+Why this is BOLA:
+The server correctly authenticates user X, but when X supplies a valid vehicle identifier belonging to user Y, the API returns Y's vehicle/location object instead of checking ownership and rejecting the request.
 
-Please perform these two checks:
-1. Send the same Y vehicle-location request without the Authorization header. Record whether you get 401/403 or data.
-2. Restore X's token and try one obviously invalid/random vehicle UUID. Record the status code and response.
+Expected secure behavior:
+After identifying user X from the Bearer token, the backend should verify that the requested vehicle belongs to X. If it belongs to another user, it should normally return 403 Forbidden (or a deliberately chosen 404 if the application uses object-hiding behavior).
 
-Why these two checks matter:
-- Removing the token confirms that authentication is still enforced.
-- An invalid UUID shows how the endpoint behaves for a nonexistent object and gives us a useful comparison against the unauthorized-but-valid Y vehicle.
+Actual behavior:
+X token + Y vehicle ID -> HTTP 200 + Y's location, name and email.
 
-After those two responses, we can document the finding cleanly and decide whether any additional validation is necessary.
+This gives us a clean three-way proof:
+A. No token -> 401
+B. X token + nonexistent vehicle -> 404
+C. X token + Y's valid vehicle -> 200 + Y's protected data
+
+Impact:
+A logged-in user who obtains another valid vehicle identifier can access that vehicle owner's location information and associated identity data. The exposed response includes precise latitude/longitude, full name, email address and vehicle ID.
+
+For learning purposes, notice that the UUID itself is not the vulnerability. UUIDs may be difficult to guess, but object identifiers must never be treated as authorization controls. The vulnerability exists because the backend trusts the supplied object reference without confirming ownership.
+
+At this point the core vulnerability is confirmed. Do not enumerate many vehicle IDs; that would add little technical value to the finding.
+
+Next step for Phase #8:
+We should now inspect one or two closely related vehicle endpoints to determine whether this authorization weakness is isolated to /location or is part of a broader object-authorization pattern. Keep the same human-driven method: one controlled cross-user test at a time, compare expected vs actual behavior, and record the evidence.
